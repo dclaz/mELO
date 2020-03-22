@@ -52,8 +52,9 @@ library(mELO)
 The following vignettes describe the functionality and utility of the
 package in more detail:
 
-  - [Introduction](vignettes/introduction.html).
-  - [Application to AFL matches](vignettes/afl.html).
+  - [Introduction](https://dclaz.github.io/mELO/articles/introduction.html)
+  - [Application to AFL
+    matches](https://dclaz.github.io/mELO/articles/afl.html)
 
 ## Example
 
@@ -129,9 +130,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1    PAPER 2215.6    80  40    0   40   0
-#> 2 SCISSORS 2206.2    80  40    0   40   0
-#> 3     ROCK 2178.2    80  40    0   40   1
+#> 1     ROCK 2210.4    80  40    0   40   1
+#> 2 SCISSORS 2209.4    80  40    0   40   0
+#> 3    PAPER 2180.2    80  40    0   40   0
 
 # Get predictions
 mELO_preds <- predict(
@@ -146,10 +147,10 @@ cbind(
 )
 #>   time_index  throw_1  throw_2 outcome mELO_preds
 #> 1          1    PAPER     ROCK       1      0.998
-#> 2          2     ROCK SCISSORS       1      0.999
+#> 2          2     ROCK SCISSORS       1      0.998
 #> 3          3 SCISSORS    PAPER       1      0.999
 #> 4          4     ROCK    PAPER       0      0.002
-#> 5          5 SCISSORS     ROCK       0      0.001
+#> 5          5 SCISSORS     ROCK       0      0.002
 #> 6          6    PAPER SCISSORS       0      0.001
 ```
 
