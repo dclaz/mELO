@@ -2,7 +2,7 @@ Package: mELO
 Type: Package
 Title: Multidimensional ELO Ratings
 Version: 0.1.0
-Author: David Lazaridis
+Author: David Lazaridis <davidlaz@gmail.com>
 Maintainer: David Lazaridis <davidlaz@gmail.com>
 Description: An implementation of DeepMind's multidimensional Elo rating (mELO) 
     approach. The mELO rating system has the desirable properties of being able 
@@ -23,3 +23,5 @@ Imports:
     ggplot2,
     tidyr
 RoxygenNote: 7.0.2
+URL: https://dclaz.github.io/mELO, https://github.com/dclaz/mELO
+
