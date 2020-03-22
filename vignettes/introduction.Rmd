@@ -1,0 +1,239 @@
+---
+title: "Introduction to mELO ratings"
+author: "David Lazaridis"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to mELO ratings}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+`mELO` is an R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.org/abs/1806.02643) (mELO) system for evaluating agents.
+This package uses code directly from Alec Stephenson and Jeff Sonas excellent 
+[PlayerRatings](https://cran.r-project.org/package=PlayerRatings) 
+package (v1.0-3, 2019-02-22).
+
+[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that a rating/evaluation method should have the following properties:
+
+* **P1.** *Invariant*: adding redundant copies of an agent or task to the data should make no difference.
+* **P2.** *Continuous*: the evaluation method should be robust to small changes in the data.
+* **P3.** *Interpretable*: hard to formalize, but the procedure should agree with intuition in basic cases.
+    
+Typical methods for performing pairwise comparisons such as Elo or Glicko 
+violate **P1** and can result in poor evaluations of agents and poor predictions 
+of outcomes.
+
+Additionally, typical methods can perform poorly in an environment where 
+there exist **cyclical** or **non-transitive interactions** between agents or players. 
+Below we demonstrate the utility of the mELO package with some simple examples.
+    
+    
+    
+# Evaluating agents with non-transitive interactions 
+We provide some examples of how the `mELO` package can be used to evaluate 
+agents and predict outcomes in the presence of non-transitive interactions. The 
+examples are *trivial* but do demonstrate the weaknesses of existing methods and 
+the utility of the mELO approch.
+
+## Rock-Paper-Scissors
+Out first model will evaluate throws in the 2-player game of
+[Rock-Paper-Scissors](https://en.wikipedia.org/wiki/Rock_paper_scissors). The 
+direction of the arrows in the figure below give the winner of each thrown pair
+
+<p align="center">
+  <img src="images/rps.png">
+</p>
+
+```{r rps_example_1, message=FALSE, warning=FALSE}
+# Load packages
+library(mELO)
+library(dplyr)
+
+# Inspect data
+rps_df %>% head() %>% knitr::kable()
+
+```
+
+The second and third columns give the throws chosen. A 1 in the outcome field 
+denotes a win for throw 1, 0 denotes a win for throw 2. The `rps_df` data has
+`r nrow(rps_df)` matches.
+
+### ELO model
+
+The predictions probabilities estimated by an Elo model are given by
+$$ 
+  \hat{p}_{ij} = \sigma (\alpha(r_i + \gamma_i - r_j))
+$$
+Where $\hat{p}_{ij}$ is the estimated probability of player $i$ beating player $j$, 
+$r_i$ is the current rating of player $i$, $\alpha = \ln(10)/400$, $\gamma_i$ represents the first move or home ground advantage for player $i$ and 
+$$
+  \sigma(x) = \frac{1}{(1+ e^{-x})}.
+$$
+
+After a match, the following rule is used to update ratings
+$$
+  r_i^* = r_i + \eta \delta_{ij}
+$$
+where $\eta$ is the learning rate and $\delta = \hat{p}_{ij} - y$ where
+$y \in \{0, 1\}$ is the outcome of the match for player $i$.
+
+The following code fits a standard Elo model using the `ELO()` function with 
+a default `eta` (the learning rate) and `p1_advantage` (Player 1 advantage 
+i.e; first mover or home ground advantage).
+
+
+```{r rps_ELO_1}
+# Fit model
+rps_ELO <- ELO(rps_df)
+# Display output
+rps_ELO
+```
+
+Now we can generate some predictions on a sample of the data and compare 
+them to the actual outcomes
+
+```{r rps_ELO_2}
+ELO_preds <- predict(
+    rps_ELO,
+    head(rps_df)
+)
+
+results_df <- data.frame(
+    head(rps_df),
+    ELO_preds = ELO_preds %>% round(3)
+)
+results_df %>% knitr::kable()
+```
+
+We observe that the Elo predictions are very poor. We can plot the history of 
+the ratings using the `plot()` function
+
+```{r rps_ELO_3}
+plot(rps_ELO)
+```
+
+We note that the ratings bounce up and down as the throws consistently lose and
+win to the same players.
+
+Because the ability of an agent is described by a single parameter, the Elo 
+ratings bake-in the assumption that relative abilities are transitive. This assumption 
+is clearly innappropriate in this setting (and likely many others). The Elo model completely fails to 
+capture the dynamics of this simple game and cannot be used to adequately rate 
+or evaluate throws or predict outcomes.
+
+
+### mELO model
+
+The predictions probabilities estimated by an mELO model are given by
+$$ 
+  \hat{p}_{ij} = \sigma (\alpha(r_i + \gamma_i - r_j + \textbf{c}_i \Omega \textbf{c}_j' ))
+$$
+where $\Omega$ is a $2k \times 2k$ matrix constructed such that
+$$
+  \Omega = \sum_{i=1}^{k} (e_{2i-1} e_{2i} - e_{2i} e_{2i-1}')
+$$
+and $\textbf{c}_i$ is a row vector of the $m \times 2k$ dimension \textbf{C} matrix
+which encodes the non-transitive interactions between the $m$ agents or players.
+Larger $k$ allows for better estimates in situations with more complex dynamics, 
+which we will observe later. 
+
+After a match, the following rules are used to update ratings
+$$
+  r_i^* = r_i + \eta_1 \delta_{ij},
+$$
+$$
+\textbf{c}_i^* = \textbf{c}_i + \eta_2 \delta_{ij} \Omega \textbf{c}_j
+$$
+where $\eta_1$ and $\eta_2$ are the learning rates for the ratings vector $\textbf{r}$ and 
+$\textbf{C}$ matrix respectively.
+
+The following code fits a mELO model using the `mELO()` function with 
+a default $k=1$, learning rates and player 1 advantage parameters.
+
+
+```{r rps_mELO_1}
+# Fit model
+rps_mELO <- mELO(rps_df)
+# Display output
+rps_mELO
+```
+
+Predictions can generated using
+
+```{r rps_mELO_2}
+mELO_preds <- predict(
+    rps_mELO,
+    head(rps_df)
+)
+
+results_df <- data.frame(
+    head(rps_df),
+    mELO_preds = mELO_preds %>% round(3)
+)
+results_df %>% knitr::kable()
+```
+
+We observe that the mELO predictions are very good, they accurately capture the
+cyclical, non-transitive properties of the game. We can plot the history of 
+the ratings using the `plot()` function
+
+```{r rps_mELO_3}
+plot(rps_mELO)
+```
+
+The mELO ratings quickly stabilise, but we note that the ratings aren't all equal
+which we might expect if the dynamics were captured properly. However, the rating 
+is not the only thing that matters in making a prediction from a mELO model. Let
+$$
+\textbf{A} = \textbf{c} \Omega \textbf{c}' 
+$$
+be the $m \times m$ advantage-disadvantage matrix for our model, where $a_{ij}$ is the 
+advantage agent $i$ has over agent $j$. mELO uses elements of this matrix
+when making predictions. The $\textbf{A}$ matrix can be obtained from a mELO model 
+using `get_adv_mat()`
+```{r rps_mELO_4}
+get_adv_mat(rps_mELO) %>% 
+  round(0) %>%
+  knitr::kable()
+```
+
+The advantge-disadvantage estimates are what result in the accurate win
+probabilties despite the stability and inequality of ratings. The $\textbf{C}$ 
+matrix can be obtained with `rps_mELO$c_mat` and an array of its history can be 
+obtained using `rps_mELO$c_mat_history`.
+
+A function has been provided to easily plot the evolution of the $\text{c}$ 
+vectors for each agent
+```{r rps_mELO_5, fig.height=3}
+plot_c_mat(rps_mELO)
+```
+
+# Other features
+
+See the help files for details on the other available functions:
+
+* `add_noise_to_outcomes()`
+* `c_array_as_df()`
+* `hist_array_as_df()`
+* `construct_omega()`
+* `logloss()`
+* and others...
+
+These functions can be used for diagnostic purposes or help prepare data for 
+model outputs for custom plots.

@@ -1,0 +1,19 @@
+---
+title: "Application of mELO ratings to AFL matches"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Application of mELO ratings to AFL matches}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mELO)
+```
