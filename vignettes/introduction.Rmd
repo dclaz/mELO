@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(1337)
 ```
 
 # Introduction
@@ -49,7 +50,7 @@ Below we demonstrate the utility of the mELO package with some simple examples.
 We provide some examples of how the `mELO` package can be used to evaluate 
 agents and predict outcomes in the presence of non-transitive interactions. The 
 examples are *trivial* but do demonstrate the weaknesses of existing methods and 
-the utility of the mELO approch.
+the utility of the mELO approach.
 
 ## Rock-Paper-Scissors
 Out first model will evaluate throws in the 2-player game of
@@ -109,14 +110,14 @@ Now we can generate some predictions on a sample of the data and compare
 them to the actual outcomes
 
 ```{r rps_ELO_2}
-ELO_preds <- predict(
+rps_ELO_preds <- predict(
     rps_ELO,
     head(rps_df)
 )
 
 results_df <- data.frame(
     head(rps_df),
-    ELO_preds = ELO_preds %>% round(3)
+    ELO_preds = rps_ELO_preds %>% round(3)
 )
 results_df %>% knitr::kable()
 ```
@@ -133,7 +134,7 @@ win to the same players.
 
 Because the ability of an agent is described by a single parameter, the Elo 
 ratings bake-in the assumption that relative abilities are transitive. This assumption 
-is clearly innappropriate in this setting (and likely many others). The Elo model completely fails to 
+is clearly inappropriate in this setting (and likely many others). The Elo model completely fails to 
 capture the dynamics of this simple game and cannot be used to adequately rate 
 or evaluate throws or predict outcomes.
 
@@ -177,14 +178,14 @@ rps_mELO
 Predictions can generated using
 
 ```{r rps_mELO_2}
-mELO_preds <- predict(
+rps_mELO_preds <- predict(
     rps_mELO,
     head(rps_df)
 )
 
 results_df <- data.frame(
     head(rps_df),
-    mELO_preds = mELO_preds %>% round(3)
+    mELO_preds = rps_mELO_preds %>% round(3)
 )
 results_df %>% knitr::kable()
 ```
@@ -213,8 +214,8 @@ get_adv_mat(rps_mELO) %>%
   knitr::kable()
 ```
 
-The advantge-disadvantage estimates are what result in the accurate win
-probabilties despite the stability and inequality of ratings. The $\textbf{C}$ 
+The advantage-disadvantage estimates are what result in the accurate win
+probabilities despite the stability and inequality of ratings. The $\textbf{C}$ 
 matrix can be obtained with `rps_mELO$c_mat` and an array of its history can be 
 obtained using `rps_mELO$c_mat_history`.
 
@@ -223,6 +224,86 @@ vectors for each agent
 ```{r rps_mELO_5, fig.height=3}
 plot_c_mat(rps_mELO)
 ```
+
+## Rock-Paper-Scissors-<span style="color:red">Fire</span>-<span style="color:blue">Water</span>
+In this example we will consider a more complex variant of rock-paper-scissors. 
+Here, there are two additional throws, **fire** and **water** which behave according to the 
+figure below
+
+<p align="center">
+  <img src="images/rpsfw.png">
+</p>
+
+Observe that fire beats everything except water, and water loses to everything 
+except fire.
+
+Knowing that a regular Elo model will obviously fail to model this situation 
+accurately, we being fitting a mELO model with $k=1$
+
+```{r rps_mELO_6}
+rpsfw_mELO_1 <- mELO(rpsfw_df, k=1)
+rpsfw_mELO_1
+
+# Sample data to make predictions on
+rpsfw_sample_df <- rpsfw_df %>%
+    filter(outcome == 1) %>%
+    mutate(time_index = NA) %>%
+    distinct() %>%
+    arrange(throw_1, throw_2) %>%
+    mutate(time_index = 1:n())
+
+# Get predictions
+rpsfw_mELO_preds <- predict(
+    rpsfw_mELO_1,
+    rpsfw_sample_df
+)
+cbind(
+    rpsfw_sample_df,
+    rpsfw_mELO_preds %>% round(3)
+)
+
+```
+The predictions are *almost* right, but according to the rules, paper will always 
+beat rock, and scissors always beat paper. Let's look at the evolution of the 
+ratings and the \textbf{c} vectors
+
+```{r rps_mELO_7}
+plot(rpsfw_mELO_1)
+plot_c_mat(rpsfw_mELO_1)
+```
+
+Further playing around with learning rate parameters and the number of training 
+matches fails to improve these results. Let's fit a mELO model with $k=2$
+
+```{r rps_mELO_8}
+rpsfw_mELO_2 <- mELO(rpsfw_df, k=2)
+rpsfw_mELO_2
+
+# Get predictions
+rpsfw_mELO_preds_2 <- predict(
+    rpsfw_mELO_2,
+    rpsfw_sample_df
+)
+
+cbind(
+    rpsfw_sample_df,
+    rpsfw_mELO_preds_2 %>% round(3)
+)
+
+# Inspect advantage matrix
+get_adv_mat(rpsfw_mELO_2)
+
+```
+
+These predictions are spot on and the $\textbf{A}$ matrix is in line with our 
+expectations. Let's inspect the historical ratings and \textbf{c} vectors
+
+```{r rps_mELO_9}
+plot(rpsfw_mELO_2)
+plot_c_mat(rpsfw_mELO_2)
+```
+
+Whilst an ordinary Elo model and mELO model with $k=1$ fails to capture the dynamics rock-paper-scissors-fire-water, a mELO model with $k=2$ succeeds.
 
 # Other features
 

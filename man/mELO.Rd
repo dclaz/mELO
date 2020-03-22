@@ -104,7 +104,7 @@ rps_mELO <- mELO(rps_df, k=1)
 rps_mELO
 # Inspect advantage matrix
 get_adv_mat(rps_mELO)
-# Get predictioncs
+# Get predictions
 mELO_preds <- predict(
     rps_mELO,
     head(rps_df)

@@ -54,8 +54,8 @@ library(mELO)
 The following vignettes describe the functionality and utility of the package
 in more detail:
 
-* [Introduction](vignettes/introduction.html). 
-* [Application to AFL matches](vignettes/afl.html).
+* [Introduction](doc/introduction.html)
+* [Application to AFL matches](doc/afl.html)
 
 
 ## Example
