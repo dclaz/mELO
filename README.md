@@ -52,9 +52,14 @@ library(mELO)
 The following vignettes describe the functionality and utility of the
 package in more detail:
 
-  - [Introduction](https://dclaz.github.io/mELO/articles/introduction.html)
+  - [Introduction](https://dclaz.github.io/mELO/articles/introduction.html).
+    An introduction to the `mELO` package with examples for evaluating
+    agents with cyclic and other more complex non-transitive interaction
+    properties.
   - [Application to AFL
-    matches](https://dclaz.github.io/mELO/articles/afl.html)
+    matches](https://dclaz.github.io/mELO/articles/afl.html). An
+    investigation of whether there is any evidence of non-transitive
+    relationships in AFL match outcomes.
 
 ## Example
 
@@ -130,9 +135,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1     ROCK 2210.4    80  40    0   40   1
-#> 2 SCISSORS 2209.4    80  40    0   40   0
-#> 3    PAPER 2180.2    80  40    0   40   0
+#> 1     ROCK 2214.2    80  40    0   40   1
+#> 2 SCISSORS 2202.9    80  40    0   40   0
+#> 3    PAPER 2183.0    80  40    0   40   0
 
 # Get predictions
 mELO_preds <- predict(

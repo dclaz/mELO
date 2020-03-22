@@ -54,8 +54,10 @@ library(mELO)
 The following vignettes describe the functionality and utility of the package
 in more detail:
 
-* [Introduction](https://dclaz.github.io/mELO/articles/introduction.html)
-* [Application to AFL matches](https://dclaz.github.io/mELO/articles/afl.html)
+* [Introduction](https://dclaz.github.io/mELO/articles/introduction.html). An introduction to 
+the `mELO` package with examples for evaluating agents with cyclic and other more complex non-transitive interaction properties.
+* [Application to AFL matches](https://dclaz.github.io/mELO/articles/afl.html). 
+An investigation of whether there is any evidence of non-transitive relationships in AFL match outcomes.
 
 
 ## Example
