@@ -227,8 +227,7 @@ mELO <- function(
         n_lag <- init_data[[7]]
         names(ratings_init) <- names(n_games) <- init_data$Player
 
-        # c matrix initialise
-        c_mat_init <- init_c_mat
+
 
     } else {
 
@@ -238,16 +237,27 @@ mELO <- function(
         n_games <- n_win <- n_draw <- n_loss <- n_lag <- rep(0, length.out = n_players)
         names(ratings_init) <- names(n_games) <- names(n_lag) <- players
 
-        # initialise matrix of C vectors
+
+
+
+    }
+
+    # C matrix
+    if (!is.null(init_c_mat)){
+        # c matrix initialise
+        c_mat_init <- init_c_mat
+
+    } else {
+
         c_mat_init <- matrix(
             #1, doesn't work
-            rnorm(2*k*n_players, 0, 2),
+            runif(2*k*n_players, -10, 10),
             ncol = 2*k,
             nrow = n_players
         )
 
-        # Think of a way to decompose an observed WIN/LOSS matrix in to a C
-        # matrix for better initial params?
+        # Perhaps decompose an observed WIN/LOSS matrix in to a C Omega C'
+        # for better initial params?
 
         # Fix names
         rownames(c_mat_init) <- players

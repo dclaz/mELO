@@ -251,7 +251,8 @@ mELO_logloss_error <- function(
   # Fit model to INIT + TRAIN data
   model <- mELO(
     init_train_df,
-    k = 1,
+    # init_c_mat = 
+    k = 2,
     eta_1 = hyperparams[1],          # \eta_1
     eta_2 = hyperparams[2],          # \eta_2
     p1_advantage = hyperparams[3],   # \gamma
@@ -279,7 +280,7 @@ mELO_best_params <- optim(
   mELO_logloss_error,
   method = "L-BFGS-B",
   lower = c(5, 0.01, 40),
-  upper = c(30, 1.5, 120)
+  upper = c(50, 2, 120)
 )
 
 mELO_best_params
@@ -336,7 +337,7 @@ We can also inspect the advantage matrix and plot the $\textbf{c}$ vectors for e
 
 ```{r mELO_plot}
 # Get adv matrix
-get_adv_mat(optim_mELO_model)
+#get_adv_mat(optim_mELO_model)
 # Plot c vectors for each team
 plot_c_mat(optim_mELO_model)
 
