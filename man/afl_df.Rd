@@ -11,6 +11,8 @@
 \item{\code{away_team}}{Away team.}
 \item{\code{outcome}}{Outcome of the match.}
 \item{\code{date}}{Date of match.}
+\item{\code{home_team}}{Score for home team.}
+\item{\code{away_team}}{Score for away team.}
 }}
 \usage{
 afl_df

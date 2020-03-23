@@ -28,8 +28,11 @@ afl_df <- afl_df_raw %>%
         home_team = Home.Team,
         away_team = Away.Team,
         outcome,
-        date = Date
-    )
+        date = Date,
+        home_score = Home.Points,
+        away_score = Away.Points
+    ) %>%
+    as_tibble()
 
 
 usethis::use_data(afl_df, overwrite = TRUE)

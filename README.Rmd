@@ -23,7 +23,7 @@ An R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.or
     to handle cyclic, non-transitive interactions and is better behaved in the presence of 
     redundant copies of agents or tasks. 
     
-Specifically, [Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that a rating/evaluation method should have the following properties:
+[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that a rating/evaluation method should have the following properties:
 
 * **P1.** *Invariant*: adding redundant copies of an agent or task to the data should make no difference.
 * **P2.** *Continuous*: the evaluation method should be robust to small changes in the data.
@@ -55,15 +55,15 @@ The following vignettes describe the functionality and utility of the package
 in more detail:
 
 * [Introduction](https://dclaz.github.io/mELO/articles/introduction.html). An introduction to 
-the `mELO` package with examples for evaluating agents with cyclic and other more complex non-transitive interaction properties.
+the **mELO** package with examples for evaluating agents with cyclic and other more complex non-transitive interaction properties.
 * [Application to AFL matches](https://dclaz.github.io/mELO/articles/afl.html). 
 An investigation of whether there is any evidence of non-transitive relationships in AFL match outcomes.
 
 
 ## Example
 
-The example below demonstrates how a ratings model can be fit using the `ELO` 
-and `mELO` functions.
+The example below demonstrates how a ratings model can be fit using the `ELO()` 
+and `mELO()` functions.
 
 We will fit models to predict the outcome of **rock-paper-scissor** matches. It 
 contains `r nrow(rps_df)` matches. 

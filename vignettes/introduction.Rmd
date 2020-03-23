@@ -25,7 +25,7 @@ set.seed(1337)
 
 # Introduction
 
-`mELO` is an R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.org/abs/1806.02643) (mELO) system for evaluating agents.
+**mELO** is an R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.org/abs/1806.02643) (mELO) system for evaluating agents.
 This package uses code directly from Alec Stephenson and Jeff Sonas excellent 
 [PlayerRatings](https://cran.r-project.org/package=PlayerRatings) 
 package (v1.0-3, 2019-02-22).
@@ -47,7 +47,7 @@ Below we demonstrate the utility of the mELO package with some simple examples.
     
     
 # Evaluating agents with non-transitive interactions 
-We provide some examples of how the `mELO` package can be used to evaluate 
+We provide some examples of how the **mELO** package can be used to evaluate 
 agents and predict outcomes in the presence of non-transitive interactions. The 
 examples are *trivial* but do demonstrate the weaknesses of existing methods and 
 the utility of the mELO approach.
@@ -314,7 +314,7 @@ See the help files for details on the other available functions:
 * `hist_array_as_df()`
 * `construct_omega()`
 * `logloss()`
-* and others...
+* and [others](https://dclaz.github.io/mELO/reference/index.html)... 
 
 These functions can be used for diagnostic purposes or help prepare data for 
 model outputs for custom plots.
