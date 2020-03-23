@@ -47,9 +47,9 @@ We will apply the following procedure to build models and assess their
 performance:
 
 1. **Split data in to the following segments**
-    * **Initialisation data**. Seasons 2012--2013 inclusive.
-    * **Training data**. Seasons 2014--2017 inclusive.
-    * **Test data**. Seasons 2018--2019 inclusive.
+    * **Initialisation data**. Seasons 2012--2014 inclusive.
+    * **Training data**. Seasons 2015--2018 inclusive.
+    * **Test data**. Seasons 2019.
 2. **Model fitting**
     * Select hyperparamters: learning rates & home ground advantage.
     * Fit model to initialisation data
@@ -84,8 +84,9 @@ A large sample of AFL match data has been sourced using the excellent [fitzRoy](
 available in the `afl_df` object.
 
 ```{r setup}
+# Load essential packages
 library(mELO)
-library(tidyverse)
+library(dplyr)
 
 # Inspect AFL match data
 head(afl_df) %>% knitr::kable()
@@ -98,14 +99,14 @@ Split the data in to the required segments
 init_df <- afl_df %>%
   filter(
     date > as.Date("2012-01-01"),
-    date < as.Date("2015-01-01")
+    date < as.Date("2014-01-01")
   ) %>%
   select(match_index, home_team, away_team, outcome)
 
 # Training data
 train_df <- afl_df %>%
   filter(
-    date > as.Date("2015-01-01"),
+    date > as.Date("2014-01-01"),
     date < as.Date("2018-01-01")
   ) %>%
   select(match_index, home_team, away_team, outcome)
@@ -164,9 +165,10 @@ ELO_logloss_error <- function(
   )
   
   # Calculate loss on the TRAIN data
+  # Note these predictions are made before the ratings are updated 
   train_logloss <- logloss(
-    model$preds %>% tail(n_train),
-    model$outcomes %>% tail(n_train)
+    tail(model$preds, n_train),
+    tail(model$outcomes, n_train)
   )
   
   return(train_logloss)
@@ -176,90 +178,6 @@ ELO_logloss_error <- function(
 
 Now we can use an optimisation procedure to find the hyperparameters $\Theta$ 
 such that the logloss error is minimised. 
-
-```{r ELO_error_plot}
-
-# Generate data for logloss surface
-n_plot_points <- 50
-logloss_surface <- matrix(NA, nrow = n_plot_points, ncol = n_plot_points)
-param_1_vec <- seq(5, 75, length.out = n_plot_points)
-param_2_vec <- seq(0, 150, length.out = n_plot_points)
-
-# Loop through params
-for (i in 1:length(param_1_vec)){
-    for(j in 1:length(param_2_vec)){
-
-        logloss_surface[i,j] <- ELO_logloss_error(
-            c(param_1_vec[i], param_2_vec[j])
-        )
-        cat(
-            paste0(
-                param_1_vec[i] %>% round(4), "\t",
-                param_2_vec[j] %>% round(4), "\t",
-                logloss_surface[i,j] %>% round(4), "\n"
-            )
-        )
-    }
-}
-
-rownames(logloss_surface) <- param_1_vec
-colnames(logloss_surface) <- param_2_vec
-
-# Make data frame for plotting
-logloss_surface_df <- logloss_surface %>%
-    as.data.frame() %>%
-    mutate(K = param_1_vec) %>%
-    gather(
-        "p1_advantage",
-        "value",
-        -K
-    ) %>%
-    as_tibble() %>%
-    mutate(p1_advantage = as.numeric(p1_advantage))
-
-
-best_params_df <- data.frame(
-    K = best_params$par[1],
-    p1_advantage = best_params$par[2],
-    value = best_params$value
-)
-
-logloss_surface_df %>%
-    ggplot(
-        aes(
-            x = K,
-            y = p1_advantage,
-            fill = value
-        )
-    ) +
-    geom_tile() +
-    scale_fill_viridis_c(direction = -1) +
-    geom_point(
-        data = best_params_df,
-        aes(
-            x = K,
-            y = p1_advantage
-        ),
-        size = 2
-    ) +
-    geom_text(
-        data = best_params_df,
-        aes(
-            x = K,
-            y = p1_advantage,
-            label = paste0(
-                "f(", K %>% round(1), ", ", p1_advantage %>% round(1),") = ",
-                value %>% round(2)
-            )
-        ),
-        nudge_y = 6
-    ) +
-    ggtitle("Logloss of ELO predictions over 1000 matches") +
-    xlab("Learning rate (K)") +
-    ylab(expression(paste("Player 1 advantage (", gamma,")")))
-
-```
-
 
 
 ```{r ELO_optimisation}
@@ -285,31 +203,31 @@ optim_ELO_model <- ELO(
     init_train_df,
     test_df
   ),
-  eta = best_params$par[1],          # \eta
-  p1_advantage = best_params$par[2], # \gamma
+  eta = ELO_best_params$par[1],          # \eta
+  p1_advantage = ELO_best_params$par[2], # \gamma
 )
 
 # Generate predictions on test set
 test_preds_ELO <- tail(optim_ELO_model$preds, n_test)
 
 # Calculate logloss error on test set
-test_logloss <- logloss(
+test_logloss_ELO <- logloss(
   test_preds_ELO,
   test_df$outcome
 )
 
 # Calculate classification rate on test set
-test_class_rate <- mean(
+test_class_rate_ELO <- mean(
   (as.numeric(test_preds_ELO >= 0.5) & test_df$outcome == 1) |
     (as.numeric(test_preds_ELO < 0.5) & test_df$outcome == 0)
 )
 ```
 Results:
 
- * logloss $\mathcal{L}=$ `r test_logloss`.
- * Classification rate = `r round(test_class_rate*100, 1)`%.
+ * Test logloss $\mathcal{L}=$ `r test_logloss`.
+ * Test classification rate = `r round(test_class_rate*100, 1)`%.
 
-The figure below gives the evoltions of the Elo ratings. The vertical lines indicate the cut offs of the initialisation, training and test sets.
+The figure below gives the evolutions of the Elo ratings. The vertical lines indicate the cut offs of the initialisation, training and test sets.
 
 ```{r ELO_plot}
 plot(optim_ELO_model)
@@ -323,23 +241,28 @@ Similarly to the Elo model, we build a function to help us optimise the loss fun
 
 ```{r mELO_error_fn}
 # Function to return logloss for current selection of hyperparameters
+# k = 1
 mELO_logloss_error <- function(
   hyperparams
 ){
+  # Set seed, C matrix is initialised randomly
+  set.seed(1337)
+  
   # Fit model to INIT + TRAIN data
   model <- mELO(
     init_train_df,
     k = 1,
     eta_1 = hyperparams[1],          # \eta_1
-    eta_2 = hyperparams[2],          # \eta_1
+    eta_2 = hyperparams[2],          # \eta_2
     p1_advantage = hyperparams[3],   # \gamma
     save_history = FALSE
   )
   
   # Calculate loss on the TRAIN data
+  # Note these predictions are made before the ratings are updated 
   train_logloss <- logloss(
-    model$preds %>% tail(n_train),
-    model$outcomes %>% tail(n_train)
+    tail(model$preds, n_train),
+    tail(model$outcomes, n_train)
   )
   
   return(train_logloss)
@@ -350,11 +273,13 @@ Now we can use an optimisation procedure to find the hyperparameters $\Theta$
 such that the logloss error is minimised. 
 
 ```{r mELO_optimisation}
-# Optimisation (assuming it's smooth)
+# Optimisation (assuming the surface is reasonably well behaved)
 mELO_best_params <- optim(
-  c(20, 1.1, 50),
+  c(20, 0.1, 75),
   mELO_logloss_error,
-  method = "CG"
+  method = "L-BFGS-B",
+  lower = c(5, 0.01, 40),
+  upper = c(30, 1.5, 120)
 )
 
 mELO_best_params
@@ -368,28 +293,30 @@ $\gamma=$ `r round(mELO_best_params$par[3],2)` (where the logarithmic loss $\mat
 
 ```{r mELO_test}
 # Fit model with optimal hyperparams
-optim_mELO_model <- ELO(
+optim_mELO_model <- mELO(
   bind_rows(
     init_train_df,
     test_df
   ),
-  eta = best_params$par[1],          # \eta
-  p1_advantage = best_params$par[2], # \gamma
+  k = 1,
+  eta_1 = mELO_best_params$par[1], 
+  eta_2 = mELO_best_params$par[2],
+  p1_advantage = mELO_best_params$par[3], 
 )
 
 # Generate predictions on test set
-test_preds_ELO <- tail(optim_ELO_model$preds, n_test)
+test_preds_mELO <- tail(optim_mELO_model$preds, n_test)
 
 # Calculate logloss error on test set
-test_logloss <- logloss(
-  test_preds_ELO,
+test_logloss_mELO <- logloss(
+  test_preds_mELO,
   test_df$outcome
 )
 
 # Calculate classification rate on test set
-test_class_rate <- mean(
-  (as.numeric(test_preds_ELO >= 0.5) & test_df$outcome == 1) |
-    (as.numeric(test_preds_ELO < 0.5) & test_df$outcome == 0)
+test_class_rate_mELO <- mean(
+  (as.numeric(test_preds_mELO >= 0.5) & test_df$outcome == 1) |
+    (as.numeric(test_preds_mELO < 0.5) & test_df$outcome == 0)
 )
 ```
 Results:
@@ -402,8 +329,17 @@ The figure below gives the evoltions of the Elo ratings. The vertical lines indi
 ```{r mELO_plot}
 plot(optim_mELO_model)
 abline(v=c(n_init, n_init+n_train), lty=2)
+
 ```
 
+We can also inspect the advantage matrix and plot the $\textbf{c}$ vectors for each team.
 
+```{r mELO_plot}
+# Get adv matrix
+get_adv_mat(optim_mELO_model)
+# Plot c vectors for each team
+plot_c_mat(optim_mELO_model)
+
+```
 # Conclusion
 

@@ -241,7 +241,7 @@ mELO <- function(
         # initialise matrix of C vectors
         c_mat_init <- matrix(
             #1, doesn't work
-            rnorm(2*k*n_players, 10, 2),
+            rnorm(2*k*n_players, 0, 2),
             ncol = 2*k,
             nrow = n_players
         )

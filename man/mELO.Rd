@@ -32,7 +32,7 @@ columns Player and Rating.}
 \item{init_c_mat}{Initialise a rating model with \code{c_mat} component of the
 returned list of the output from a previous \code{mELO()} call, or a matrix with
 with dimensions (#agents, k). Recall the C matrix encodes the non-transitive
-interactions of the agents.}
+interactions of the agents. This is initialised randomly if not provided.}
 
 \item{init_rating}{The initial rating for players not appearing in
 \code{init_data}.}
