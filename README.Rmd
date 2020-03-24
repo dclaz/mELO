@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 An R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.org/abs/1806.02643)
-(mELO) approach. The mELO rating system has the desirable properties of being able 
+(mELO) approach for evaluating agents. The mELO rating system has the desirable properties of being able 
     to handle cyclic, non-transitive interactions and is better behaved in the presence of 
     redundant copies of agents or tasks. 
     

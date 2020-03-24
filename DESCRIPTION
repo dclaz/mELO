@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: person("David", "Lazaridis", email = "davidlaz@gmail.com",
                   role = c("aut", "cre"))
 Description: An implementation of DeepMind's multidimensional Elo rating (mELO) 
-    approach. The mELO rating system has the desirable properties of being able 
+    approach for evaluating agents. The mELO rating system has the desirable properties of being able 
     to handle cyclic interactions and is better behaved in the presence of 
     redundant copies of agents or tasks. This package uses code directly from 
     Alec Stephenson and Jeff Sonas excellent PlayerRatings package (v1.0-3, 2019-02-22).
