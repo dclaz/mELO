@@ -147,10 +147,11 @@ $$
 $$
 where $\Omega$ is a $2k \times 2k$ matrix constructed such that
 $$
-  \Omega = \sum_{i=1}^{k} (e_{2i-1} e_{2i}' - e_{2i} e_{2i-1}')
+  \Omega = \sum_{i=1}^{k} (\textbf{e}_{2i-1} \textbf{e}_{2i}' - \textbf{e}_{2i} \textbf{e}_{2i-1}')
 $$
 and $\textbf{c}_i$ is a row vector of the $m \times 2k$ dimension \textbf{C} matrix
-which encodes the non-transitive interactions between the $m$ agents or players.
+which encodes the non-transitive interactions between the $m$ agents or players. 
+$\textbf{e}_j$ are standard basis vectors spanning the columns of $\Omega$.
 Larger $k$ allows for better estimates in situations with more complex dynamics, 
 which we will observe later. 
 

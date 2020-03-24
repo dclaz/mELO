@@ -282,8 +282,8 @@
 <p>The predictions probabilities estimated by an mELO model are given by <span class="math display">\[ 
   \hat{p}_{ij} = \sigma (\alpha(r_i + \gamma_i - r_j + \textbf{c}_i \Omega \textbf{c}_j' ))
 \]</span> where <span class="math inline">\(\Omega\)</span> is a <span class="math inline">\(2k \times 2k\)</span> matrix constructed such that <span class="math display">\[
-  \Omega = \sum_{i=1}^{k} (e_{2i-1} e_{2i}' - e_{2i} e_{2i-1}')
-\]</span> and <span class="math inline">\(\textbf{c}_i\)</span> is a row vector of the <span class="math inline">\(m \times 2k\)</span> dimension  matrix which encodes the non-transitive interactions between the <span class="math inline">\(m\)</span> agents or players. Larger <span class="math inline">\(k\)</span> allows for better estimates in situations with more complex dynamics, which we will observe later.</p>
+  \Omega = \sum_{i=1}^{k} (\textbf{e}_{2i-1} \textbf{e}_{2i}' - \textbf{e}_{2i} \textbf{e}_{2i-1}')
+\]</span> and <span class="math inline">\(\textbf{c}_i\)</span> is a row vector of the <span class="math inline">\(m \times 2k\)</span> dimension  matrix which encodes the non-transitive interactions between the <span class="math inline">\(m\)</span> agents or players. <span class="math inline">\(\textbf{e}_j\)</span> are standard basis vectors spanning the columns of <span class="math inline">\(\Omega\)</span>. Larger <span class="math inline">\(k\)</span> allows for better estimates in situations with more complex dynamics, which we will observe later.</p>
 <p>After a match, the following rules are used to update ratings <span class="math display">\[
   r_i^* = r_i + \eta_1 \delta_{ij},
 \]</span> <span class="math display">\[
