@@ -65,6 +65,13 @@ predict.mELO_rating <- function(
 ){
 
     # Stops
+    if (class(object) != "mELO_rating"){
+        stop("Model object must be of class mELO_rating")
+    }
+    if (!(object$type %in% c("ELO", "mELO"))){
+        stop("model type must be ELO or mELO")
+    }
+
     if (
         missing(new_match_data) ||
         (nrow(new_match_data) == 0)

@@ -24,6 +24,10 @@
 #'     # stable, good estimates
 plot_c_mat <- function(mELO_model){
 
+    if (mELO_model$type != "mELO"){
+        stop("Must be a mELO rating model to plot c vectors")
+    }
+
     tidy_c_mat_df <- tidyr::gather(
         c_array_as_df(mELO_model$c_mat_history),
         key = "C", value = "value",

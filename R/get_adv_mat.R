@@ -17,9 +17,14 @@
 #' rpsfw_model <- mELO(rpsfw_df, k=2)
 #' get_adv_mat(rpsfw_model)
 get_adv_mat <- function(model){
-    if (model$type != "mELO"){
-        stop("Must be a mELO rating model to obtain an advantage matrix")
+    # Stops
+    if (class(model) != "mELO_rating"){
+        stop("Model object must be of class mELO_rating")
     }
+    if (!(model$type %in% c("mELO"))){
+        stop("model type must be ELO or mELO")
+    }
+
 
     omega_mat <- construct_omega(model$k)
     c_mat <- model$c_mat

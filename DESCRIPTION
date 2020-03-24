@@ -4,7 +4,6 @@ Title: Multidimensional ELO Ratings
 Version: 0.1.0
 Authors@R: person("David", "Lazaridis", email = "davidlaz@gmail.com",
                   role = c("aut", "cre"))
-Maintainer: David Lazaridis <davidlaz@gmail.com>
 Description: An implementation of DeepMind's multidimensional Elo rating (mELO) 
     approach. The mELO rating system has the desirable properties of being able 
     to handle cyclic interactions and is better behaved in the presence of 
@@ -22,7 +21,8 @@ Imports:
     fitzRoy,
     dplyr,
     ggplot2,
-    tidyr
+    tidyr,
+    magrittr,
+    viridisLite
 RoxygenNote: 7.0.2
 URL: https://dclaz.github.io/mELO, https://github.com/dclaz/mELO
-

@@ -13,9 +13,8 @@ rating system has the desirable properties of being able to handle
 cyclic, non-transitive interactions and is better behaved in the
 presence of redundant copies of agents or tasks.
 
-Specifically, [Balduzzi, et
-al. (2018)](https://arxiv.org/abs/1806.02643) propose that a
-rating/evaluation method should have the following properties:
+[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that
+a rating/evaluation method should have the following properties:
 
   - **P1.** *Invariant*: adding redundant copies of an agent or task to
     the data should make no difference.
@@ -53,7 +52,7 @@ The following vignettes describe the functionality and utility of the
 package in more detail:
 
   - [Introduction](https://dclaz.github.io/mELO/articles/introduction.html).
-    An introduction to the `mELO` package with examples for evaluating
+    An introduction to the **mELO** package with examples for evaluating
     agents with cyclic and other more complex non-transitive interaction
     properties.
   - [Application to AFL
@@ -64,7 +63,7 @@ package in more detail:
 ## Example
 
 The example below demonstrates how a ratings model can be fit using the
-`ELO` and `mELO` functions.
+`ELO()` and `mELO()` functions.
 
 We will fit models to predict the outcome of **rock-paper-scissor**
 matches. It contains 120 matches.
@@ -123,6 +122,8 @@ We note that while the estimated ratings are roughly equal, the
 predicted probabilities are very poor. Elo cannot handle the cyclic,
 non-transitive nature of this system.
 
+Let’s fit a **multidimensional Elo** model using `mELO()`.
+
 ``` r
 # Fit mELO model
 rps_mELO <- mELO(rps_df, k=1)
@@ -135,9 +136,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1     ROCK 2214.2    80  40    0   40   1
-#> 2 SCISSORS 2202.9    80  40    0   40   0
-#> 3    PAPER 2183.0    80  40    0   40   0
+#> 1    PAPER 2207.1    80  40    0   40   0
+#> 2 SCISSORS 2198.8    80  40    0   40   0
+#> 3     ROCK 2194.1    80  40    0   40   1
 
 # Get predictions
 mELO_preds <- predict(
@@ -151,13 +152,31 @@ cbind(
     mELO_preds = round(mELO_preds, 3)
 )
 #>   time_index  throw_1  throw_2 outcome mELO_preds
-#> 1          1    PAPER     ROCK       1      0.998
-#> 2          2     ROCK SCISSORS       1      0.998
+#> 1          1    PAPER     ROCK       1      0.999
+#> 2          2     ROCK SCISSORS       1      0.999
 #> 3          3 SCISSORS    PAPER       1      0.999
-#> 4          4     ROCK    PAPER       0      0.002
-#> 5          5 SCISSORS     ROCK       0      0.002
+#> 4          4     ROCK    PAPER       0      0.001
+#> 5          5 SCISSORS     ROCK       0      0.001
 #> 6          6    PAPER SCISSORS       0      0.001
 ```
+
+A convenient helper function has been provided to generate predictions
+for all interactions
+
+``` r
+model_pred_mat(
+  rps_mELO,
+  rps_df[[2]]
+) %>% 
+  round(3) %>%
+  knitr::kable()
+```
+
+|          | PAPER |  ROCK | SCISSORS |
+| -------- | ----: | ----: | -------: |
+| PAPER    | 0.500 | 0.999 |    0.001 |
+| ROCK     | 0.001 | 0.500 |    0.999 |
+| SCISSORS | 0.999 | 0.001 |    0.500 |
 
 The mELO model with `k=1` *can* handle the cyclic, non-transitive nature
 of this system which results in much more accurate predictions. The `k`

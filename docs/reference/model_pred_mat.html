@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert C matrix array to data.frame — c_array_as_df • mELO</title>
+<title>Return pairwise predictions for specified agents — model_pred_mat • mELO</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,9 +42,10 @@
 
 
 
-<meta property="og:title" content="Convert C matrix array to data.frame — c_array_as_df" />
-<meta property="og:description" content="Converts the C history array from the mELO output to a data.frame. Useful for
-plotting diagnostics." />
+<meta property="og:title" content="Return pairwise predictions for specified agents — model_pred_mat" />
+<meta property="og:description" content="Given a mELO_rating model and a vector of agents, this function gives the
+predicted success probabilities for each combination. This is useful for mELO
+models as the ratings alone is not useful for predicting outcomes." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -132,53 +133,67 @@ plotting diagnostics." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert C matrix array to data.frame</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dclaz/mELO/blob/master/R/c_array_as_df.R'><code>R/c_array_as_df.R</code></a></small>
-    <div class="hidden name"><code>c_array_as_df.Rd</code></div>
+    <h1>Return pairwise predictions for specified agents</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dclaz/mELO/blob/master/R/model_pred_mat.R'><code>R/model_pred_mat.R</code></a></small>
+    <div class="hidden name"><code>model_pred_mat.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Converts the C history array from the mELO output to a data.frame. Useful for
-plotting diagnostics.</p>
+    <p>Given a mELO_rating model and a vector of agents, this function gives the
+predicted success probabilities for each combination. This is useful for mELO
+models as the ratings alone is not useful for predicting outcomes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>c_array_as_df</span>(<span class='no'>c_mat_array</span>)</pre>
+    <pre class="usage"><span class='fu'>model_pred_mat</span>(<span class='no'>model</span>, <span class='no'>agents</span>, <span class='kw'>round</span> <span class='kw'>=</span> <span class='fl'>4</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>c_mat_array</th>
-      <td><p>The history of C matrix values for a mELO rating model.</p></td>
+      <th>model</th>
+      <td><p>An object of class <code>mELO_rating</code>.</p></td>
+    </tr>
+    <tr>
+      <th>agents</th>
+      <td><p>a vector of agents/players/teams you would like to pairwise
+predictions for.</p></td>
+    </tr>
+    <tr>
+      <th>round</th>
+      <td><p>Round results to how many figures. Default is 4.</p></td>
+    </tr>
+    <tr>
+      <th>actual_matrix</th>
+      <td><p>Should result be an actual matrix? Default is FALSE and
+the output is a data.frame.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame.</p>
+    <p>a data.frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># rock paper scissors fire water model</span>
-<span class='no'>rpsfw_model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mELO.html'>mELO</a></span>(<span class='no'>rpsfw_df</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>2</span>)
-<span class='no'>c_mat_df</span> <span class='kw'>&lt;-</span> <span class='fu'>c_array_as_df</span>(<span class='no'>rpsfw_model</span>$<span class='no'>c_mat_history</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>c_mat_df</span>)</div><div class='output co'>#&gt;   Player time        c_1       c_2      c_3        c_4
-#&gt; 1   FIRE    1  -9.290009 -3.577590 7.538899 -0.2613253
-#&gt; 2   FIRE    2  -9.290009 -3.577590 7.538899 -0.2613253
-#&gt; 3   FIRE    3 -12.297388 -7.650964 2.054910  2.8650375
-#&gt; 4   FIRE    4 -12.297388 -7.650964 2.054910  2.8650375
-#&gt; 5   FIRE    5 -12.297388 -7.650964 2.054910  2.8650375
-#&gt; 6   FIRE    6 -12.297388 -7.650964 2.054910  2.8650375</div><div class='input'>
-<span class='co'># Plot the evolution of C vectors for each throw</span>
-<span class='co'># Make data a bit 'tidyer'</span>
-<span class='no'>tidy_c_mat_df</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(
-    <span class='no'>c_mat_df</span>,
-    <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"C"</span>,
-    <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>,
-    -<span class='no'>time</span>, -<span class='no'>Player</span>
-    )
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>tidy_c_mat_df</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>time</span>,<span class='kw'>y</span><span class='kw'>=</span><span class='no'>value</span>,<span class='kw'>colour</span><span class='kw'>=</span><span class='no'>C</span>)) +
-    <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='kw'>size</span><span class='kw'>=</span><span class='fl'>1.25</span>) +
-    <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(~<span class='no'>Player</span>)</div><div class='img'><img src='c_array_as_df-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Fit a mELO model that can handle these types of interactions.</span>
+<span class='no'>rps_mELO</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mELO.html'>mELO</a></span>(<span class='no'>rps_df</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>1</span>)
+<span class='no'>rps_mELO</span></div><div class='output co'>#&gt; 
+#&gt; mELO Ratings For 3 Players Playing 120 Games
+#&gt; 
+#&gt; k = 1.
+#&gt; 
+#&gt;     Player Rating Games Win Draw Loss Lag
+#&gt; 1    PAPER 2203.6    80  40    0   40   0
+#&gt; 2 SCISSORS 2202.1    80  40    0   40   0
+#&gt; 3     ROCK 2194.4    80  40    0   40   1
+#&gt; </div><div class='input'>
+<span class='co'># Get pairwise predictions</span>
+<span class='fu'>model_pred_mat</span>(
+   <span class='no'>rps_mELO</span>,
+   <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>rps_df</span><span class='kw'>[[</span><span class='fl'>2</span>]])
+)</div><div class='output co'>#&gt;           PAPER   ROCK SCISSORS
+#&gt; PAPER    0.5000 0.9986   0.0013
+#&gt; ROCK     0.0014 0.5000   0.9987
+#&gt; SCISSORS 0.9987 0.0013   0.5000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

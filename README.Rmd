@@ -54,10 +54,12 @@ library(mELO)
 The following vignettes describe the functionality and utility of the package
 in more detail:
 
-* [Introduction](https://dclaz.github.io/mELO/articles/introduction.html). An introduction to 
+1. [Introduction](https://dclaz.github.io/mELO/articles/introduction.html). An introduction to 
 the **mELO** package with examples for evaluating agents with cyclic and other more complex non-transitive interaction properties.
-* [Application to AFL matches](https://dclaz.github.io/mELO/articles/afl.html). 
+2. [Application to AFL matches](https://dclaz.github.io/mELO/articles/afl.html). 
 An investigation of whether there is any evidence of non-transitive relationships in AFL match outcomes.
+3. [How do noisy outcomes affect mELO models](https://dclaz.github.io/mELO/articles/noise.html). An investigation in to 
+how noise affects the accuracy of a mELO model.
 
 
 ## Example
@@ -98,6 +100,9 @@ We note that while the estimated ratings are roughly equal, the predicted
 probabilities are very poor. Elo cannot handle the cyclic, non-transitive 
 nature of this system.
 
+
+Let's fit a **multidimensional Elo** model using `mELO()`.
+
 ```{r mELO_example}
 # Fit mELO model
 rps_mELO <- mELO(rps_df, k=1)
@@ -116,6 +121,18 @@ cbind(
     head(rps_df),
     mELO_preds = round(mELO_preds, 3)
 )
+```
+A convenient helper function has been provided to generate predictions for all
+interactions
+
+```{r mELO_example_2}
+model_pred_mat(
+  rps_mELO,
+  rps_df[[2]]
+) %>% 
+  round(3) %>%
+  knitr::kable()
+
 ```
 
 The mELO model with `k=1` *can* handle the cyclic, non-transitive 

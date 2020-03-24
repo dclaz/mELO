@@ -101,10 +101,13 @@ comparisons." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/afl.html">Application of mELO ratings to AFL matches</a>
+      <a href="../articles/afl.html">Application of mELO to AFL matches</a>
     </li>
     <li>
       <a href="../articles/introduction.html">Introduction to mELO ratings</a>
+    </li>
+    <li>
+      <a href="../articles/noise.html">Impact of noisy outcomes in mELO models</a>
     </li>
   </ul>
 </li>
@@ -220,15 +223,15 @@ components:</p><dl class='dl-horizontal'>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># AFL data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>afl_df</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 5</span><span>
-#&gt;   match_index home_team       away_team     outcome date      
-#&gt;         </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>    
-#&gt; </span><span style='color: #555555;'>1</span><span>           1 Richmond        Melbourne           1 2000-03-08
-#&gt; </span><span style='color: #555555;'>2</span><span>           2 Essendon        Port Adelaide       1 2000-03-09
-#&gt; </span><span style='color: #555555;'>3</span><span>           3 North Melbourne West Coast          0 2000-03-10
-#&gt; </span><span style='color: #555555;'>4</span><span>           4 Adelaide        Footscray           0 2000-03-11
-#&gt; </span><span style='color: #555555;'>5</span><span>           5 Fremantle       Geelong             0 2000-03-11
-#&gt; </span><span style='color: #555555;'>6</span><span>           6 St Kilda        Sydney              0 2000-03-12</div><div class='input'><span class='no'>afl_ELO_ratings</span> <span class='kw'>&lt;-</span> <span class='fu'>ELO</span>(<span class='no'>afl_df</span>[<span class='fl'>1</span>:<span class='fl'>4</span>], <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>p1_advantage</span> <span class='kw'>=</span> <span class='fl'>70</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>afl_df</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span><span>
+#&gt;   match_index home_team     away_team   outcome date       home_score away_score
+#&gt;         </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>           1 Richmond      Melbourne         1 2000-03-08         94         92
+#&gt; </span><span style='color: #555555;'>2</span><span>           2 Essendon      Port Adela~       1 2000-03-09        156         62
+#&gt; </span><span style='color: #555555;'>3</span><span>           3 North Melbou~ West Coast        0 2000-03-10        111        154
+#&gt; </span><span style='color: #555555;'>4</span><span>           4 Adelaide      Footscray         0 2000-03-11        108        131
+#&gt; </span><span style='color: #555555;'>5</span><span>           5 Fremantle     Geelong           0 2000-03-11        107        129
+#&gt; </span><span style='color: #555555;'>6</span><span>           6 St Kilda      Sydney            0 2000-03-12        100        134</div><div class='input'><span class='no'>afl_ELO_ratings</span> <span class='kw'>&lt;-</span> <span class='fu'>ELO</span>(<span class='no'>afl_df</span>[<span class='fl'>1</span>:<span class='fl'>4</span>], <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>p1_advantage</span> <span class='kw'>=</span> <span class='fl'>70</span>)
 <span class='no'>afl_ELO_ratings</span></div><div class='output co'>#&gt; 
 #&gt; ELO Ratings For 18 Players Playing 3887 Games
 #&gt; 

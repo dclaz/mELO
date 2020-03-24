@@ -1,0 +1,23 @@
+---
+title: "Impact of noisy outcomes in mELO models"
+author: "David Lazaridis"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Application of mELO ratings to AFL matches}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction

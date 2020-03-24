@@ -66,8 +66,8 @@ ELO <- function(
     if (!is.data.frame(init_data) && !is.null(init_data)){
         stop("init_data must be a data.frame")
     }
-    if (ncol(match_data) != 4)
-        stop("match_data must have four variables")
+    # if (ncol(match_data) != 4)
+    #     stop("match_data must have four variables")
     if (nrow(match_data) == 0) {
         stop("match_data is empty and 'status' is NULL")
     }

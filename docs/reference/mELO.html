@@ -103,10 +103,13 @@ in the presence of redundant copies of players/agents or tasks." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/afl.html">Application of mELO ratings to AFL matches</a>
+      <a href="../articles/afl.html">Application of mELO to AFL matches</a>
     </li>
     <li>
       <a href="../articles/introduction.html">Introduction to mELO ratings</a>
+    </li>
+    <li>
+      <a href="../articles/noise.html">Impact of noisy outcomes in mELO models</a>
     </li>
   </ul>
 </li>
@@ -179,7 +182,7 @@ columns Player and Rating.</p></td>
       <td><p>Initialise a rating model with <code>c_mat</code> component of the
 returned list of the output from a previous <code>mELO()</code> call, or a matrix with
 with dimensions (#agents, k). Recall the C matrix encodes the non-transitive
-interactions of the agents.</p></td>
+interactions of the agents. This is initialised randomly if not provided.</p></td>
     </tr>
     <tr>
       <th>init_rating</th>
@@ -287,14 +290,14 @@ components:</p><dl class='dl-horizontal'>
 #&gt; k = 1.
 #&gt; 
 #&gt;     Player Rating Games Win Draw Loss Lag
-#&gt; 1 SCISSORS 2211.3    80  40    0   40   0
-#&gt; 2     ROCK 2203.9    80  40    0   40   1
-#&gt; 3    PAPER 2184.8    80  40    0   40   0
+#&gt; 1    PAPER 2202.9    80  40    0   40   0
+#&gt; 2 SCISSORS 2202.1    80  40    0   40   0
+#&gt; 3     ROCK 2195.1    80  40    0   40   1
 #&gt; </div><div class='input'><span class='co'># Inspect advantage matrix</span>
 <span class='fu'><a href='get_adv_mat.html'>get_adv_mat</a></span>(<span class='no'>rps_mELO</span>)</div><div class='output co'>#&gt;              PAPER      ROCK  SCISSORS
-#&gt; PAPER        0.000  1178.030 -1100.776
-#&gt; ROCK     -1178.030     0.000  1158.209
-#&gt; SCISSORS  1100.776 -1158.209     0.000</div><div class='input'><span class='co'># Get predictions</span>
+#&gt; PAPER        0.000  1134.865 -1141.080
+#&gt; ROCK     -1134.865     0.000  1154.679
+#&gt; SCISSORS  1141.080 -1154.679     0.000</div><div class='input'><span class='co'># Get predictions</span>
 <span class='no'>mELO_preds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(
     <span class='no'>rps_mELO</span>,
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>rps_df</span>)
@@ -303,12 +306,12 @@ components:</p><dl class='dl-horizontal'>
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>rps_df</span>),
     <span class='no'>mELO_preds</span>
 )</div><div class='output co'>#&gt;   time_index  throw_1  throw_2 outcome  mELO_preds
-#&gt; 1          1    PAPER     ROCK       1 0.998734879
-#&gt; 2          2     ROCK SCISSORS       1 0.998673962
-#&gt; 3          3 SCISSORS    PAPER       1 0.998482985
-#&gt; 4          4     ROCK    PAPER       0 0.001265121
-#&gt; 5          5 SCISSORS     ROCK       0 0.001326038
-#&gt; 6          6    PAPER SCISSORS       0 0.001517015</div><div class='input'>    # Much better predictions!
+#&gt; 1          1    PAPER     ROCK       1 0.998610747
+#&gt; 2          2     ROCK SCISSORS       1 0.998650443
+#&gt; 3          3 SCISSORS    PAPER       1 0.998591795
+#&gt; 4          4     ROCK    PAPER       0 0.001389253
+#&gt; 5          5 SCISSORS     ROCK       0 0.001349557
+#&gt; 6          6    PAPER SCISSORS       0 0.001408205</div><div class='input'>    # Much better predictions!
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

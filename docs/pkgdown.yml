@@ -4,4 +4,5 @@ pkgdown_sha: ~
 articles:
   afl: afl.html
   introduction: introduction.html
+  noise: noise.html
 

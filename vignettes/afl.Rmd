@@ -35,7 +35,7 @@ statistical methods are not likely to yield useful estimates or predictions.
 In this document we will use the **mELO** package to see if a mELO model can 
 outperform a regular Elo model for the task of predicting the outcome of [AFL](https://en.wikipedia.org/wiki/Australian_Football_League) matches. We do not
 expect the performance of the mELO model to be amazing. Other methods for predicting 
-match outcomes that are more highly parameterised (such as Glicko or Steph as implemented in the 
+match outcomes that are more highly parameterised (such as *Glicko* or *Steph* as implemented in the 
 [PlayerRating](https://cran.r-project.org/package=PlayerRatings) package) or are 
 able to make predictions conditional on additional information (other statistical 
 or machine learning methods) would likely yield better results.
@@ -49,7 +49,7 @@ performance:
 1. **Split data in to the following segments**
     * **Initialisation data**. Seasons 2012--2014 inclusive.
     * **Training data**. Seasons 2015--2018 inclusive.
-    * **Test data**. Seasons 2019.
+    * **Test data**. Seasons 2019--2020.
 2. **Model fitting**
     * Select hyperparamters: learning rates & home ground advantage.
     * Fit model to initialisation data
@@ -67,7 +67,7 @@ The first segment of the AFL match data is used to initialise the model so that
 reasonable estimates of $\textbf{r}$ and $\textbf{C}$ can be obtained and plugged in 
 to the training model before we start calculating estimated model errors. 
 
-The outcomes we are modelling will be $y \in {0, 0.5, 1}$ representing a loss, 
+The outcomes we are modelling will be $y \in \{0, 0.5, 1\}$ representing a loss, 
 draw and win respectively.
 
 We will use the logarithmic loss function (equivalent to cross-entropy in this setting) to evaluate model fits, calculated as
@@ -90,6 +90,7 @@ library(dplyr)
 
 # Inspect AFL match data
 head(afl_df) %>% knitr::kable()
+
 ```
 
 Split the data in to the required segments
@@ -99,14 +100,14 @@ Split the data in to the required segments
 init_df <- afl_df %>%
   filter(
     date > as.Date("2012-01-01"),
-    date < as.Date("2014-01-01")
+    date < as.Date("2015-01-01")
   ) %>%
   select(match_index, home_team, away_team, outcome)
 
 # Training data
 train_df <- afl_df %>%
   filter(
-    date > as.Date("2014-01-01"),
+    date > as.Date("2015-01-01"),
     date < as.Date("2018-01-01")
   ) %>%
   select(match_index, home_team, away_team, outcome)
@@ -224,8 +225,8 @@ test_class_rate_ELO <- mean(
 ```
 Results:
 
- * Test logloss $\mathcal{L}=$ `r test_logloss`.
- * Test classification rate = `r round(test_class_rate*100, 1)`%.
+ * Test logloss $\mathcal{L}=$ `r test_logloss_ELO`.
+ * Test classification rate = `r round(test_class_rate_ELO*100, 1)`%.
 
 The figure below gives the evolutions of the Elo ratings. The vertical lines indicate the cut offs of the initialisation, training and test sets.
 
@@ -251,8 +252,12 @@ mELO_logloss_error <- function(
   # Fit model to INIT + TRAIN data
   model <- mELO(
     init_train_df,
-    # init_c_mat = 
-    k = 2,
+    # init_c_mat = matrix(
+    #   runif(2*1*18, -5, 5),
+    #   ncol = 2,
+    #   nrow = 18
+    # ),
+    k = 1,
     eta_1 = hyperparams[1],          # \eta_1
     eta_2 = hyperparams[2],          # \eta_2
     p1_advantage = hyperparams[3],   # \gamma
@@ -276,11 +281,11 @@ such that the logloss error is minimised.
 ```{r mELO_optimisation}
 # Optimisation (assuming the surface is reasonably well behaved)
 mELO_best_params <- optim(
-  c(20, 0.1, 75),
+  c(30, 0.2, 75),
   mELO_logloss_error,
   method = "L-BFGS-B",
-  lower = c(5, 0.01, 40),
-  upper = c(50, 2, 120)
+  lower = c(0.1, 0.01, 40),
+  upper = c(100,  2,    120)
 )
 
 mELO_best_params
@@ -294,6 +299,9 @@ $\gamma=$ `r round(mELO_best_params$par[3],2)` (where the logarithmic loss $\mat
 
 ```{r mELO_test}
 # Fit model with optimal hyperparams
+# and same seed
+set.seed(1337)
+
 optim_mELO_model <- mELO(
   bind_rows(
     init_train_df,
@@ -322,10 +330,10 @@ test_class_rate_mELO <- mean(
 ```
 Results:
 
- * logloss $\mathcal{L}=$ `r test_logloss`.
- * Classification rate = `r round(test_class_rate*100, 1)`%.
+ * logloss $\mathcal{L}=$ `r test_logloss_mELO`.
+ * Classification rate = `r round(test_class_rate_mELO*100, 1)`%.
 
-The figure below gives the evoltions of the Elo ratings. The vertical lines indicate the cut offs of the initialisation, training and test sets.
+The figure below gives the evoltions of the mELO ratings, they are very similar to the Elo paths. The vertical lines indicate the cut offs of the initialisation, training and test sets.
 
 ```{r mELO_plot}
 plot(optim_mELO_model)
@@ -335,12 +343,54 @@ abline(v=c(n_init, n_init+n_train), lty=2)
 
 We can also inspect the advantage matrix and plot the $\textbf{c}$ vectors for each team.
 
-```{r mELO_plot}
+```{r mELO_plot_2}
 # Get adv matrix
-#get_adv_mat(optim_mELO_model)
+adv_mat <- get_adv_mat(optim_mELO_model)
+
+# Plot a cool heatmap
+# might give us an idea how 'similar' teams play styles are maybe?
+heatmap(
+  adv_mat,
+  scale = "none", 
+  col = viridisLite::viridis(256)
+)
+
 # Plot c vectors for each team
 plot_c_mat(optim_mELO_model)
 
 ```
+
 # Conclusion
 
+Let's gather our results
+
+```{r results}
+results_df <- data.frame(
+  model = c("Elo", "mELO"),
+  `Test logloss` = c(test_logloss_ELO, test_logloss_mELO) %>% round(3),
+  `Test Accuracy` = paste0(
+    (100*c(test_class_rate_ELO, test_class_rate_mELO)) %>% round(1), "%"
+  )
+)
+
+results_df %>% knitr::kable()
+
+
+```
+
+Based on the results in the table above, a mELO model (with $k=1$) is inferior to the Elo model for predicting the outcome of AFL matches in the test set spanning seasons 2018--2019 as measured by both logloss and accuracy (classification rate) metrics. 
+
+If one was interested, there are a number of things to try to improve performance, including but not limited to:
+
+* Improving the home ground advantage indicator.
+* Replace the $\{0, 0.5, 1\}$ outcome with a value that is some function of the match margin. 
+* Find an improved initialisation of the $\textbf{C}$ matrix.
+
+Interestingly, the mELO model obtains inferior performance even on the training data. Adjusting the base team ratings with the $\textbf{A}$ matrix when making predictions hurts performance if the $\textbf{c}$ cannot be learned properly. 
+
+If we look at the $\textbf{c}$ vector plots for the rock-paper-scissors-fire-water example in the [introductory vignette](introduction.html), we observe that even in that much simpler game, with fewer teams and no noise in the outcomes, it still takes ~75 mathes before the $\textbf{c}$ stablise and the predictions become accurate and we can be confident that the dynamics of the game have been captured. In contract, the AFL match data is far noisier[^1], with far fewer reptitions of matches and where we actually expect the *true ability* of teams to actually change in time due to changes to rosters, coaching and other factors. 
+
+For the AFL data, we suspect that the $\textbf{c}$ vectors cannot be learned adequately as they cannot keep up with the noisy dynamics of the environment and thus the resulting adjustments to predictions only hurt performance. If the learning rate ($\eta_2$) is too low, the model won't learn much about the current regime before it changes, if it is too high, it will overfit to the most recent matches. 
+
+
+[^1]: In the sense that two teams could play twice and results of the two matches could be very different. This doesn't happer in rock-scissors-paper and its variants. The impact of noise in outcomes for mELO models is explored in the [this vignette](noise.html).

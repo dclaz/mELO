@@ -24,6 +24,15 @@ plot.mELO_rating <- function(
     ylab = paste(modelled_ratings$type, "Ratings"),
     main = NULL
 ){
+
+    # Stops
+    if (class(modelled_ratings) != "mELO_rating"){
+        stop("Model object must be of class mELO_rating")
+    }
+    if (!(modelled_ratings$type %in% c("ELO", "mELO"))){
+        stop("model type must be ELO or mELO")
+    }
+
     if (is.null(modelled_ratings$history)){
         stop("Need Full History For Plotting")
     }
