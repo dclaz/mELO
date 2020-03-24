@@ -23,7 +23,7 @@ An R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.or
     to handle cyclic, non-transitive interactions and is better behaved in the presence of 
     redundant copies of agents or tasks. 
     
-[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that a rating/evaluation method should have the following properties:
+[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) proposed that a rating/evaluation method should have the following properties:
 
 * **P1.** *Invariant*: adding redundant copies of an agent or task to the data should make no difference.
 * **P2.** *Continuous*: the evaluation method should be robust to small changes in the data.
@@ -58,8 +58,8 @@ in more detail:
 the **mELO** package with examples for evaluating agents with cyclic and other more complex non-transitive interaction properties.
 2. [Application to AFL matches](https://dclaz.github.io/mELO/articles/02_afl.html). 
 An investigation of whether there is any evidence of non-transitive relationships in AFL match outcomes.
-3. [Impact of noisy outcomes in mELO models](https://dclaz.github.io/mELO/articles/03_noise.html). An investigation in to 
-how noise impacts the estimation abilities or prediction accuracy of a mELO model.
+3. [Impact of noisy outcomes in mELO models](https://dclaz.github.io/mELO/articles/03_noise.html). An investigation into 
+how noise impacts the estimation abilities and/or  theprediction accuracy of a mELO model.
 
 
 ## Example
@@ -137,6 +137,6 @@ model_pred_mat(
 
 The mELO model with `k=1` *can* handle the cyclic, non-transitive 
 nature of this system which results in much more accurate predictions. The `k` 
-parameter determines the complexity of the non-transitive interactions that will 
-be attempted to be modelled.
+parameter determines the complexity of the non-transitive interactions that can 
+be modelled.
 

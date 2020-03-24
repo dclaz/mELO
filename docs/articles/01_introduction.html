@@ -108,7 +108,7 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p><strong>mELO</strong> is an R implementation of DeepMind’s <a href="https://arxiv.org/abs/1806.02643">multidimensional Elo rating</a> (mELO) system for evaluating agents. This package uses code directly from Alec Stephenson and Jeff Sonas excellent <a href="https://cran.r-project.org/package=PlayerRatings">PlayerRatings</a> package (v1.0-3, 2019-02-22).</p>
-<p><a href="https://arxiv.org/abs/1806.02643">Balduzzi, et al. (2018)</a> propose that a rating/evaluation method should have the following properties:</p>
+<p><a href="https://arxiv.org/abs/1806.02643">Balduzzi, et al. (2018)</a> proposed that a rating/evaluation method should have the following properties:</p>
 <ul>
 <li>
 <strong>P1.</strong> <em>Invariant</em>: adding redundant copies of an agent or task to the data should make no difference.</li>
@@ -117,7 +117,7 @@
 <li>
 <strong>P3.</strong> <em>Interpretable</em>: hard to formalize, but the procedure should agree with intuition in basic cases.</li>
 </ul>
-<p>Typical methods for performing pairwise comparisons such as Elo or Glicko violate <strong>P1</strong> and can result in poor evaluations of agents and poor predictions of outcomes.</p>
+<p>Typical methods for performing pairwise comparisons such as Elo or Glicko violate <strong>P1</strong> and can result in poor evaluations of agents and predictions of outcomes.</p>
 <p>Additionally, typical methods can perform poorly in an environment where there exist <strong>cyclical</strong> or <strong>non-transitive interactions</strong> between agents or players. Below we demonstrate the utility of the mELO package with some simple examples.</p>
 </div>
 <div id="evaluating-agents-with-non-transitive-interactions" class="section level1">
@@ -279,7 +279,7 @@
 <div id="melo-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#melo-model" class="anchor"></a>mELO model</h3>
-<p>The predictions probabilities estimated by an mELO model are given by <span class="math display">\[ 
+<p>The success probabilities estimated by an mELO model are given by <span class="math display">\[ 
   \hat{p}_{ij} = \sigma (\alpha(r_i + \gamma_i - r_j + \textbf{c}_i \Omega \textbf{c}_j' ))
 \]</span> where <span class="math inline">\(\Omega\)</span> is a <span class="math inline">\(2k \times 2k\)</span> matrix constructed such that <span class="math display">\[
   \Omega = \sum_{i=1}^{k} (\textbf{e}_{2i-1} \textbf{e}_{2i}' - \textbf{e}_{2i} \textbf{e}_{2i-1}')
@@ -303,7 +303,7 @@
 <a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt; 1    PAPER 2211.4    80  40    0   40   0</span></a>
 <a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt; 2     ROCK 2194.6    80  40    0   40   1</span></a>
 <a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; 3 SCISSORS 2193.9    80  40    0   40   0</span></a></code></pre></div>
-<p>Predictions can generated using</p>
+<p>Predictions can be generated using</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">rps_mELO_preds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(</a>
 <a class="sourceLine" id="cb6-2" title="2">    rps_mELO,</a>
 <a class="sourceLine" id="cb6-3" title="3">    <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(rps_df)</a>
@@ -402,10 +402,10 @@
 </tr>
 </tbody>
 </table>
-<p>We observe that the mELO predictions are very good, they accurately capture the cyclical, non-transitive properties of the game. We can plot the history of the ratings using the <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> function</p>
+<p>We observe that the mELO predictions are very good. They accurately capture the cyclical, non-transitive properties of the game. We can plot the history of the ratings using the <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> function</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(rps_mELO)</a></code></pre></div>
 <p><img src="01_introduction_files/figure-html/rps_mELO_3-1.png" width="700"></p>
-<p>The mELO ratings quickly stabilise, but we note that the ratings aren’t all equal which we might expect if the dynamics were captured properly. However, the rating is not the only thing that matters in making a prediction from a mELO model. Let <span class="math display">\[
+<p>The mELO ratings quickly stabilise, but we note that the ratings aren’t all equal which we might expect for agents that exhibit perfectly cyclical dynamics. However, the ratings by themselves are not the only things that matter when making predictions from a mELO model. Let <span class="math display">\[
 \textbf{A} = \textbf{c} \Omega \textbf{c}' 
 \]</span> be the <span class="math inline">\(m \times m\)</span> advantage-disadvantage matrix for our model, where <span class="math inline">\(a_{ij}\)</span> is the advantage agent <span class="math inline">\(i\)</span> has over agent <span class="math inline">\(j\)</span>. mELO uses elements of this matrix when making predictions. The <span class="math inline">\(\textbf{A}\)</span> matrix can be obtained from a mELO model using <code><a href="../reference/get_adv_mat.html">get_adv_mat()</a></code></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/get_adv_mat.html">get_adv_mat</a></span>(rps_mELO) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -453,7 +453,7 @@
 <p align="center">
 <img src="images/rpsfw.png"></p>
 <p>Observe that fire beats everything except water, and water loses to everything except fire.</p>
-<p>Knowing that a regular Elo model will obviously fail to model this situation accurately, we being fitting a mELO model with <span class="math inline">\(k=1\)</span></p>
+<p>Knowing that a regular Elo model will obviously fail to model this situation accurately, we will begin by fitting a mELO model with <span class="math inline">\(k=1\)</span></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">rpsfw_mELO_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mELO.html">mELO</a></span>(rpsfw_df, <span class="dt">k=</span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb11-2" title="2">rpsfw_mELO_<span class="dv">1</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt; </span></a>
@@ -501,7 +501,7 @@
 <p><img src="01_introduction_files/figure-html/rps_mELO_7-1.png" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/plot_c_mat.html">plot_c_mat</a></span>(rpsfw_mELO_<span class="dv">1</span>)</a></code></pre></div>
 <p><img src="01_introduction_files/figure-html/rps_mELO_7-2.png" width="700"></p>
-<p>Further playing around with learning rate parameters and the number of training matches fails to improve these results. Let’s fit a mELO model with <span class="math inline">\(k=2\)</span></p>
+<p>Further playing around with learning rate parameters and the number of training matches fails to improve these results. Let’s fit a mELO model with <span class="math inline">\(k=2\)</span> which should have more capacity to capture the non-transitive dynamics exhibited here.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">rpsfw_mELO_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mELO.html">mELO</a></span>(rpsfw_df, <span class="dt">k=</span><span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb14-2" title="2">rpsfw_mELO_<span class="dv">2</span></a>
 <a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt; </span></a>

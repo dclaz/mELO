@@ -30,14 +30,14 @@ This package uses code directly from Alec Stephenson and Jeff Sonas excellent
 [PlayerRatings](https://cran.r-project.org/package=PlayerRatings) 
 package (v1.0-3, 2019-02-22).
 
-[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that a rating/evaluation method should have the following properties:
+[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) proposed that a rating/evaluation method should have the following properties:
 
 * **P1.** *Invariant*: adding redundant copies of an agent or task to the data should make no difference.
 * **P2.** *Continuous*: the evaluation method should be robust to small changes in the data.
 * **P3.** *Interpretable*: hard to formalize, but the procedure should agree with intuition in basic cases.
     
 Typical methods for performing pairwise comparisons such as Elo or Glicko 
-violate **P1** and can result in poor evaluations of agents and poor predictions 
+violate **P1** and can result in poor evaluations of agents and predictions 
 of outcomes.
 
 Additionally, typical methods can perform poorly in an environment where 
@@ -141,7 +141,7 @@ or evaluate throws or predict outcomes.
 
 ### mELO model
 
-The predictions probabilities estimated by an mELO model are given by
+The success probabilities estimated by an mELO model are given by
 $$ 
   \hat{p}_{ij} = \sigma (\alpha(r_i + \gamma_i - r_j + \textbf{c}_i \Omega \textbf{c}_j' ))
 $$
@@ -176,7 +176,7 @@ rps_mELO <- mELO(rps_df)
 rps_mELO
 ```
 
-Predictions can generated using
+Predictions can be generated using
 
 ```{r rps_mELO_2}
 rps_mELO_preds <- predict(
@@ -202,7 +202,7 @@ model_pred_mat(
   knitr::kable()
 ```
 
-We observe that the mELO predictions are very good, they accurately capture the
+We observe that the mELO predictions are very good. They accurately capture the
 cyclical, non-transitive properties of the game. We can plot the history of 
 the ratings using the `plot()` function
 
@@ -211,8 +211,7 @@ plot(rps_mELO)
 ```
 
 The mELO ratings quickly stabilise, but we note that the ratings aren't all equal
-which we might expect if the dynamics were captured properly. However, the rating 
-is not the only thing that matters in making a prediction from a mELO model. Let
+which we might expect for agents that exhibit perfectly cyclical dynamics. However, the ratings by themselves are not the only things that matter when making predictions from a mELO model. Let
 $$
 \textbf{A} = \textbf{c} \Omega \textbf{c}' 
 $$
@@ -250,7 +249,7 @@ Observe that fire beats everything except water, and water loses to everything
 except fire.
 
 Knowing that a regular Elo model will obviously fail to model this situation 
-accurately, we being fitting a mELO model with $k=1$
+accurately, we will begin by fitting a mELO model with $k=1$
 
 ```{r rpsfw_mELO_6}
 rpsfw_mELO_1 <- mELO(rpsfw_df, k=1)
@@ -285,7 +284,8 @@ plot_c_mat(rpsfw_mELO_1)
 ```
 
 Further playing around with learning rate parameters and the number of training 
-matches fails to improve these results. Let's fit a mELO model with $k=2$
+matches fails to improve these results. Let's fit a mELO model with $k=2$ which should
+have more capacity to capture the non-transitive dynamics exhibited here.
 
 ```{r rpsfw_mELO_8}
 rpsfw_mELO_2 <- mELO(rpsfw_df, k=2)

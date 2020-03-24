@@ -13,8 +13,8 @@ agents. The mELO rating system has the desirable properties of being
 able to handle cyclic, non-transitive interactions and is better behaved
 in the presence of redundant copies of agents or tasks.
 
-[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) propose that
-a rating/evaluation method should have the following properties:
+[Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) proposed
+that a rating/evaluation method should have the following properties:
 
   - **P1.** *Invariant*: adding redundant copies of an agent or task to
     the data should make no difference.
@@ -61,8 +61,8 @@ package in more detail:
     relationships in AFL match outcomes.
 3.  [Impact of noisy outcomes in mELO
     models](https://dclaz.github.io/mELO/articles/03_noise.html). An
-    investigation in to how noise impacts the estimation abilities or
-    prediction accuracy of a mELO model.
+    investigation into how noise impacts the estimation abilities and/or
+    theprediction accuracy of a mELO model.
 
 ## Example
 
@@ -140,9 +140,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1 SCISSORS 2213.2    80  40    0   40   0
-#> 2    PAPER 2201.5    80  40    0   40   0
-#> 3     ROCK 2185.2    80  40    0   40   1
+#> 1    PAPER 2210.4    80  40    0   40   0
+#> 2     ROCK 2203.9    80  40    0   40   1
+#> 3 SCISSORS 2185.6    80  40    0   40   0
 
 # Get predictions
 mELO_preds <- predict(
@@ -157,10 +157,10 @@ cbind(
 )
 #>   time_index  throw_1  throw_2 outcome mELO_preds
 #> 1          1    PAPER     ROCK       1      0.999
-#> 2          2     ROCK SCISSORS       1      0.998
+#> 2          2     ROCK SCISSORS       1      0.999
 #> 3          3 SCISSORS    PAPER       1      0.999
 #> 4          4     ROCK    PAPER       0      0.001
-#> 5          5 SCISSORS     ROCK       0      0.002
+#> 5          5 SCISSORS     ROCK       0      0.001
 #> 6          6    PAPER SCISSORS       0      0.001
 ```
 
@@ -179,10 +179,10 @@ model_pred_mat(
 |          | PAPER |  ROCK | SCISSORS |
 | -------- | ----: | ----: | -------: |
 | PAPER    | 0.500 | 0.999 |    0.001 |
-| ROCK     | 0.001 | 0.500 |    0.998 |
-| SCISSORS | 0.999 | 0.002 |    0.500 |
+| ROCK     | 0.001 | 0.500 |    0.999 |
+| SCISSORS | 0.999 | 0.001 |    0.500 |
 
 The mELO model with `k=1` *can* handle the cyclic, non-transitive nature
 of this system which results in much more accurate predictions. The `k`
 parameter determines the complexity of the non-transitive interactions
-that will be attempted to be modelled.
+that can be modelled.
