@@ -27,20 +27,20 @@ Typical methods for performing pairwise comparisons such as Elo or
 Glicko violate **P1** and can result in poor evaluations of agents and
 poor predictions of outcomes.
 
-This package uses code directly from Alec Stephenson and Jeff Sonas
+This package uses code directly from Alec Stephenson and Jeff Sonas’s
 excellent
 [PlayerRatings](https://cran.r-project.org/package=PlayerRatings)
 package (v1.0-3, 2019-02-22).
 
 ## Installation
 
-You can install the `mELO` package from github using
+You can install the `mELO` package from github using:
 
 ``` r
 devtools::install_github("dclaz/mELO")
 ```
 
-and it can be loaded using
+and it can be loaded using:
 
 ``` r
 library(mELO)
@@ -126,7 +126,7 @@ We note that while the estimated ratings are roughly equal, the
 predicted probabilities are very poor. Elo cannot handle the cyclic,
 non-transitive nature of this system.
 
-Let’s fit a **multidimensional Elo** model using `mELO()`.
+Let’s fit a **multidimensional Elo** model using `mELO()`:
 
 ``` r
 # Fit mELO model
@@ -140,9 +140,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1    PAPER 2207.5    80  40    0   40   0
-#> 2 SCISSORS 2199.0    80  40    0   40   0
-#> 3     ROCK 2193.5    80  40    0   40   1
+#> 1    PAPER 2208.6    80  40    0   40   0
+#> 2     ROCK 2200.3    80  40    0   40   1
+#> 3 SCISSORS 2191.1    80  40    0   40   0
 
 # Get predictions
 mELO_preds <- predict(
@@ -165,7 +165,7 @@ cbind(
 ```
 
 A convenient helper function has been provided to generate predictions
-for all interactions
+for all interactions:
 
 ``` r
 model_pred_mat(

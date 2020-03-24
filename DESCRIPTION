@@ -1,6 +1,6 @@
 Package: mELO
 Type: Package
-Title: Multidimensional ELO Ratings
+Title: Multidimensional Elo Ratings
 Version: 0.1.0
 Authors@R: person("David", "Lazaridis", email = "davidlaz@gmail.com",
                   role = c("aut", "cre"))
