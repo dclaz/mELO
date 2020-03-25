@@ -7,7 +7,7 @@
 add_noise_to_outcomes(outcome, error_prob = 0.1)
 }
 \arguments{
-\item{outcome}{Original match outcome. Must be between 0 and 1 inclusive.}
+\item{outcome}{Original match outcome. Must be one of 0, 0.5, or 1.}
 
 \item{error_prob}{The probability an outcome switches from a 0 to 1 or
 vice-versa}
@@ -18,6 +18,9 @@ a numeric vector.
 \description{
 This function can be used to flip a set proportion of match outcomes. Useful
 for testing models.
+}
+\details{
+Input outcomes of 0.5 will be randomy rounded to either 0 or 1.
 }
 \examples{
 # Create some sample outcomes
@@ -39,4 +42,5 @@ table(test_df)
 
 test_df$noisy_outcome = add_noise_to_outcomes(test_df$true_outcome, error_prob = 1)
 table(test_df)
+
 }
