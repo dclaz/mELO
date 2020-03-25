@@ -40,20 +40,22 @@ The ordinary rock-paper-scissors-fire-water game (hereon referred to as **rpsfw*
   <img src="images/rpsfw.png">
 </p>
 
-The direction of the arrows indicate which throw defeats the others with certainty i.e; throw $i$ beats $j$ with $p_{ij}=1$ *iff* there is an edge from $i$ to $j$. In the simulations that follow, an edge from $i$ to $j$ will indicate a win probability of $p^*_{ij}$ and a loss probability of $q^*_{ij}=1-p_{ij}$. The new success probabilities $p^*_{ij}$ are defined such that
+The direction of the arrows indicate which throw defeats the others with certainty i.e; throw $i$ beats $j$ with $p_{ij}=1$ *iff* there is an edge from $i$ to $j$. In the simulations that follow, an edge from $i$ to $j$ will indicate a win probability of $p^*_{ij}$ and a loss probability of $q^*_{ij}=1-p_{ij}$. Ignoring cases when $i=j$, the new success probabilities $p^*_{ij}$ are defined such that
 $$
   p^*_{ij} = 
     \begin{cases}
       p_{ij} - \kappa   & \text{if  } p_{ij} = 1 \\
-      p_{ij} + \kappa   & \text{if  } p_{ij} = 0 \\
-      p_{ij}            & \text{if  } p_{ij} = 0.5 \text{ (to account for draws)},
+      p_{ij} + \kappa   & \text{if  } p_{ij} = 0 
     \end{cases}
 $$
 where $\kappa \in (0,0.5)$. We will denote this modified game as **M-rpsfw**. Also note that $p^*_{ji} = q^*_{ij}$
 
 This adjustment is equivalent to controlling the Bit Error Rate (BER) which is simply the proportion of outcomes that are flipped, which in this case will simply be equal to $\kappa$. Whilst the outcomes of each match $y_{ij}$ in **rpsfw** were deterministically set to either 0 or 1, in **M-rpsfw** they are 
 $$
-  y^*_{ij} \sim \text{Bernoulli}(p^*_{ij}).
+\begin{align}
+  y^*_{ij} &\sim \text{Bernoulli}(p^*_{ij}) &\text{ for } i \neq j, \\
+  y^*_{ij} &= 0.5 &\text{ for } i = j 
+\end{align}
 $$  
 
 We can also think of changing the outcome probabilities as influencing the systems Signal to Noise Ratio:
@@ -61,7 +63,7 @@ $$
  \text{SNR} = \frac{|0.5-\kappa|}{(\kappa(1-\kappa))^{1/2}} \\
  
 $$
-where $\kappa=0.5$ corresponds to no signal where it would be impossible to predict an outcome in advance (a coin flip). A $\kappa = 0}$ is a noiseless signal (**rpsfw**).
+where $\kappa=0.5$ corresponds to no signal where it would be impossible to predict an outcome in advance (a coin flip) and $\kappa = 0$ is a noiseless signal (**rpsfw**).
 
 
 The simulations should be able to give us an understanding of how well a mELO model can capture the dynamics of the **rpsfw** game in the presence of noisy outcomes (**M-rpsfw**). Specifically, we are testing the ability of a mELO model to predict outcomes in a system that has non-transitive probabilistic interactions (as opposed to simple deterministic interactions in  **rpsfw**). 
@@ -80,33 +82,36 @@ where
 * $p^*_{ij}$ is win probability for $i$ over $j$.
 * $\hat p_{ij}$ is the mELO estimate of $p^*_{ij}$.
 
-This loss function is essentially a [Brier Score](https://en.wikipedia.org/wiki/Brier_score) average over simulation replications.
+This loss function is essentially a [Brier Score](https://en.wikipedia.org/wiki/Brier_score) average over simulation replications. We use multiple replications due to the randomness in the initialisation of the $\textbf{C}$ matrix for the mELO model.
 
 
 ## The data
 
 Below we give a sample of the data with varying noise/error rates, where draws get randomly assigned to a win or loss with equal probability:
 
-```{r data}
+```{r data, message=FALSE, warning=FALSE}
 # Initial set up
 library(dplyr)
 library(ggplot2)
 library(mELO)
-set.seed(1337)
+set.seed(31337)
 
 rpsfw_df %>%
   mutate(
-    outcome_k00 = add_noise_to_outcomes(outcome, error_prob = 0.00),
-    outcome_k10 = add_noise_to_outcomes(outcome, error_prob = 0.10),
-    outcome_k25 = add_noise_to_outcomes(outcome, error_prob = 0.50),
-    outcome_k50 = add_noise_to_outcomes(outcome, error_prob = 0.50)
+    outcome_k000 = add_noise_to_outcomes(outcome, error_prob = 0.00),
+    outcome_k010 = add_noise_to_outcomes(outcome, error_prob = 0.10),
+    outcome_k050 = add_noise_to_outcomes(outcome, error_prob = 0.50)
   ) %>%
+  filter(throw_1 != throw_2) %>%
   sample_n(10) %>%
   knitr::kable()
 ```
 
 `outcome` is the original noiseless outcome, `outcome_k<###>` are outcomes drawn from
 $\text{Bernoulli}(p^*_{ij})$ where $p^*_{ij}$ is a function of $kappa$ (`error_prob`).
+We observe that `outcome_k010` has very few *errors* whilst `outcome_k50` is random.
+
+
 
 
 Before we begin the simulations, we have to do some work to prepare the data:
@@ -114,7 +119,7 @@ Before we begin the simulations, we have to do some work to prepare the data:
 # Increase sample size
 rpsfw_df_mod <-  do.call(
     "rbind",
-    replicate(10, rpsfw_df, simplify = FALSE)
+    replicate(20, rpsfw_df, simplify = FALSE)
 )
 # randomise and re-index  
 rpsfw_df_mod <- rpsfw_df_mod %>%
@@ -135,7 +140,66 @@ test_df <- rpsfw_df_mod %>%
 
 ## Simulations
 
+
+
 ```{r simulations_1}
+# Function that calculates the score for a single replication 
+optim_inner_brier_score <- function(kappa, n){
+  
+    current_rpsfw_df_mod <- rpsfw_df_mod %>%
+      mutate(
+        outcome = add_noise_to_outcomes(outcome, error_prob = kappa),
+        outcome = ifelse(throw_1 == throw_2, 0.5, outcome)
+      ) %>%
+      slice(1:n)
+    
+    current_test_df <- test_df %>%
+      mutate(
+        outcome = ifelse(outcome == 1, 1-kappa, outcome),
+        outcome = ifelse(outcome == 0, kappa, outcome)
+      )
+    
+  error_calc <- function(hyperparams){
+
+    model <- mELO(
+      current_rpsfw_df_mod,
+      k = 2,
+      eta_1 = hyperparams[1],
+      eta_2 = hyperparams[2],
+      save_history = FALSE
+    )
+    
+    preds <- predict(
+      model,
+      current_test_df
+    )
+    
+    error <- mean((current_test_df$outcome - preds)^2)
+    error
+  
+  }
+  
+  opt_par <- optim(
+    c(30, 0.1),
+    error_calc,
+    method = "BFGS"
+  )
+  
+  results <- list()
+  results$par <- opt_par$par
+  results$value <- opt_par$value
+  return(results)
+  
+}
+
+    model <- mELO(
+      current_rpsfw_df_mod,
+      k = 2,
+      eta_1 = 29.74933142,
+      eta_2 = 0.03691125,
+      save_history = FALSE
+    )
+
 
 ```
 
