@@ -1,5 +1,5 @@
 ---
-title: "Application of mELO to AFL matches"
+title: "Application of mELO ratings to AFL matches"
 author: "David Lazaridis"
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:

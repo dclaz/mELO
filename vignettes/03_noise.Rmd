@@ -8,7 +8,7 @@ output:
     highlight: github
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Application of mELO ratings to AFL matches}
+  %\VignetteIndexEntry{Impact of noisy outcomes in mELO models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,3 +22,12 @@ knitr::opts_chunk$set(
 
 # Introduction
 
+For the [AFL data](afl.html), we suspect that one of the reasons the mELO model did not 
+outperform the standard Elo model was because the $\textbf{C}$ matrix could not be adequately estimated in the presence of noisy outcomes. Here, we use noisy to mean that two teams could play each other twice and results of the two matches could be very different. This doesn't happer in rock-scissors-paper and its variants. 
+
+
+
+```{r setup}
+
+
+```
