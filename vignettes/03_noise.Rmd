@@ -140,9 +140,202 @@ test_df <- rpsfw_df_mod %>%
 
 ## Simulations
 
+This is where we *would* have liked to present some beautiful plots showing demonstrating things like:
+
+* *As $\kappa \rightarrow 0.5$ the harder it is for the model to correctly model the system (according to the our loss function $\mathcal{B}_{\kappa, n}$)*.
+* *Larger training samples ($n$) improves the $\mathcal{B}_{\kappa, n}$ in high SNR scenarios*
+* etc
+
+**However,** we have found that the performance of the mELO models are extremely sensitive to:
+
+* The hyperparameters, learning rates $\eta_1$ and $\eta_2$.
+* The initialisation of the $\textbf{C}$ matrix.
+* The number of training samples.
+
+Furthermore, the error surfaces (both logistic loss or $\mathcal{B}_{\kappa, n}$) are typically not continuous or concave for random initialisations of $\textbf{C}$, making it very difficult to optimise for the best set of $(\eta_1, \eta_2)$[^1] for each combination of $\kappa$ and$n$. The default learning rates $(\eta_1=16, \eta_2=1)$ used by [Balduzzi, et al. (2018)](https://arxiv.org/abs/1806.02643) do not appear to be universally appropriate, in fact $\eta_2 \approx 1$ often results in poor estimates. For these reasons, it is very difficult to systematically evaluate the mELO models under varying signal to noise ratios.
+
+
+[^1] Even initialising the models with the $\textbf{C}$ matrix obtained from an accurate 
+model built on the regular **rpsfw** does not seem to make things much better.
+
 
 
 ```{r simulations_1}
+model <- mELO(
+  current_rpsfw_df_mod,
+  k = 2,
+  eta_1 = 20,
+  eta_2 = 0.4,
+  save_history = TRUE
+)
+
+
+params_map <- matrix(
+  c(
+    231, 500, 0.3, 23421,
+    231, 500, 0.3, 3432,
+    12345, 500, 0.3, 23421,
+    12345, 500, 0.3, 3432,
+  ),
+  ncol = 4,
+  byrow = TRUE
+)
+
+# Init with good C matrix
+
+params_map <- expand.grid(
+  n = c(250, 500, 1000, 2000),
+  kappa = c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4)
+)
+
+plot_list <- list()
+
+for (k in 1:nrow(params_map)){
+  
+  print_time_status(k)
+  print_time_status(params_map[k,])
+  
+  set.seed(231)
+  n <- params_map$n[k] #500
+  kappa <- params_map$kappa[k] #0.1
+  
+  current_rpsfw_df_mod <- rpsfw_df_mod %>%
+    mutate(
+      outcome = add_noise_to_outcomes(outcome, error_prob = kappa),
+      outcome = ifelse(throw_1 == throw_2, 0.5, outcome)
+    ) %>%
+    slice(1:n)
+  
+  current_test_df <- test_df %>%
+    mutate(
+      outcome = ifelse(outcome == 1, 1-kappa, outcome),
+      outcome = ifelse(outcome == 0, kappa, outcome)
+    )
+  
+  
+  
+  
+  error_calc <- function(hyperparams){
+    set.seed(3432)
+    model <- mELO(
+      current_rpsfw_df_mod,
+      #init_c_mat = good_c_mat,
+      k = 2,
+      eta_1 = hyperparams[1],
+      eta_2 = hyperparams[2],
+      save_history = FALSE
+    )
+  
+    preds <- predict(
+      model,
+      current_test_df
+    )
+  
+    error <- mean((current_test_df$outcome - preds)^2)
+    #error <- logloss(preds, current_test_df$outcome)
+    error
+  
+  }
+  
+  # Plot
+  eta_1_vec <- seq(1, 30, length.out = 40)
+  eta_2_vec <- seq(0.05, 0.9, length.out = 40)
+  error_mat <- matrix(
+    NA,
+    nrow = length(eta_1_vec),
+    ncol = length(eta_2_vec)
+  )
+  for (i in 1:length(eta_1_vec)){
+    for(j in 1:length(eta_2_vec)){
+      error_mat[i,j] <- error_calc(
+        c(eta_1_vec[i], eta_2_vec[j])
+      )
+    }
+  }
+  
+  rownames(error_mat) <- eta_1_vec
+  colnames(error_mat) <- eta_2_vec
+  
+  # Make data frame for plotting
+  error_mat_df <- error_mat %>%
+      as.data.frame() %>%
+      mutate(eta_1 = eta_1_vec) %>%
+      tidyr::gather(
+          "eta_2",
+          "value",
+          -eta_1
+      ) %>%
+      as_tibble() %>%
+      mutate(eta_2 = as.numeric(eta_2))
+  
+  #error_mat_df %>% filter(value == min(value))
+  
+  error_plot <- error_mat_df %>%
+      ggplot(
+          aes(
+              x = eta_1,
+              y = eta_2,
+              fill = value
+          )
+      ) +
+      geom_tile() +
+      scale_fill_viridis_c(direction = -1, "Brier Score") +
+      ggtitle(
+        paste0("Brier score. kappa=", kappa, ", n=", n)
+      ) +
+      xlab(expression("Learning rate (eta_1)")) +
+      ylab(paste0("Learning rate (eta_2)"))
+
+  plot_list[[k]] <- error_plot
+
+}
+
+
+  
+
+
+
+
+pars <- error_mat_df %>% filter(value==min(value))
+  model <- mELO(
+    current_rpsfw_df_mod,
+    k = 2,
+    eta_1 = pars$eta_1,
+    eta_2 = pars$eta_2,
+    save_history = TRUE
+  )
+
+
+  model <- mELO(
+    current_rpsfw_df_mod,
+    k = 2,
+    eta_1 = 16,
+    eta_2 = 1,
+    save_history = TRUE
+  )
+  
+good_c_mat <- model$c_mat
+
+preds <- predict(
+  model,
+  current_test_df
+)
+data.frame(current_test_df, preds = preds %>% round(2)) %>%
+  arrange(-abs(preds - outcome))
+    
+```
+
+# Remedies
+
+Some ideas that could be implemented to improve the mELO models:
+
+* Regularisation for the $\textbf{c}$ vectors.
+* Momentum for the $\textbf{c}$ vectors.
+
+# Random functions
+
+
+```{r functions}
 # Function that calculates the score for a single replication 
 optim_inner_brier_score <- function(kappa, n){
   
@@ -180,9 +373,10 @@ optim_inner_brier_score <- function(kappa, n){
   }
   
   opt_par <- optim(
-    c(30, 0.1),
+    c(16, 0.4),
     error_calc,
-    method = "BFGS"
+    method = "L-BFGS-B",
+    lower = c(5, 0.)
   )
   
   results <- list()
@@ -191,35 +385,6 @@ optim_inner_brier_score <- function(kappa, n){
   return(results)
   
 }
-
-    model <- mELO(
-      current_rpsfw_df_mod,
-      k = 2,
-      eta_1 = 29.74933142,
-      eta_2 = 0.03691125,
-      save_history = FALSE
-    )
-
-
-```
-
-
-```{r lol}
-snr <- function(p){
-  abs(0.5-p)/ sqrt(p*(1-p))
-}
-
-snr_n <- function(p,n){
-  n*abs(0.5-p)/ sqrt(n*p*(1-p))
-}
-
-```
-
-# Results
-
-
-```{r results_plot1}
-1
 ```
 
 # Conclusion
