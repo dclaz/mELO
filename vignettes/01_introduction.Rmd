@@ -26,7 +26,7 @@ set.seed(1337)
 # Introduction
 
 **mELO** is an R implementation of DeepMind's [multidimensional Elo rating](https://arxiv.org/abs/1806.02643) (mELO) system for evaluating agents.
-This package uses code directly from Alec Stephenson and Jeff Sonas excellent 
+This package uses code directly from Alec Stephenson and Jeff Sonas's excellent 
 [PlayerRatings](https://cran.r-project.org/package=PlayerRatings) 
 package (v1.0-3, 2019-02-22).
 

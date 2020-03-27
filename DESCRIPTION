@@ -8,7 +8,7 @@ Description: An implementation of DeepMind's multidimensional Elo rating (mELO)
     approach for evaluating agents. The mELO rating system has the desirable properties of being able 
     to handle cyclic interactions and is better behaved in the presence of 
     redundant copies of agents or tasks. This package uses code directly from 
-    Alec Stephenson and Jeff Sonas excellent PlayerRatings package (v1.0-3, 2019-02-22).
+    Alec Stephenson and Jeff Sonas's excellent PlayerRatings package (v1.0-3, 2019-02-22).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
