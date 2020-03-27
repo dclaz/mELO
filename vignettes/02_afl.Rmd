@@ -29,7 +29,7 @@ agents or players. In situations where these behaviours are expected, a mELO
 model is likely to achieve far better results than an Elo model provided the 
 outcomes aren't too noisy and the agents abilities are locally stationary.
 
-**Note:** *Stationarity is important*. If agents *true* abilities change too fast, 
+**Note:** **Stationarity is important**. If agents *true* abilities change too fast, 
 statistical methods are not likely to yield useful estimates or predictions.
 
 In this document we will use the **mELO** package to see if a mELO model can 

@@ -140,9 +140,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1 SCISSORS 2207.3    80  40    0   40   0
-#> 2    PAPER 2197.9    80  40    0   40   0
-#> 3     ROCK 2194.8    80  40    0   40   1
+#> 1    PAPER 2200.7    80  40    0   40   0
+#> 2 SCISSORS 2200.2    80  40    0   40   0
+#> 3     ROCK 2199.2    80  40    0   40   1
 
 # Get predictions
 mELO_preds <- predict(
@@ -179,8 +179,8 @@ model_pred_mat(
 |          | PAPER |  ROCK | SCISSORS |
 | -------- | ----: | ----: | -------: |
 | PAPER    | 0.500 | 0.999 |    0.001 |
-| ROCK     | 0.001 | 0.500 |    0.998 |
-| SCISSORS | 0.999 | 0.002 |    0.500 |
+| ROCK     | 0.001 | 0.500 |    0.999 |
+| SCISSORS | 0.999 | 0.001 |    0.500 |
 
 The mELO model with `k=1` *can* handle the cyclic, non-transitive nature
 of this system which results in much more accurate predictions. The `k`

@@ -108,7 +108,7 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>As demonstrated in the <a href="01_introduction.html">introductory vignette</a>, Elo and other methods that rely on a single parameter that describe an agents ability cannot accomodate scenarios with cyclical or non-transitive interactions amongst agents or players. In situations where these behaviours are expected, a mELO model is likely to achieve far better results than an Elo model provided the outcomes aren’t too noisy and the agents abilities are locally stationary.</p>
-<p><strong>Note:</strong> <em>Stationarity is important</em>. If agents <em>true</em> abilities change too fast, statistical methods are not likely to yield useful estimates or predictions.</p>
+<p><strong>Note:</strong> <strong>Stationarity is important</strong>. If agents <em>true</em> abilities change too fast, statistical methods are not likely to yield useful estimates or predictions.</p>
 <p>In this document we will use the <strong>mELO</strong> package to see if a mELO model can outperform a regular Elo model for the task of predicting the outcome of <a href="https://en.wikipedia.org/wiki/Australian_Football_League">AFL</a> matches. We do not expect the performance of the mELO model to be amazing. Other methods for predicting match outcomes that are more highly parameterised (such as <em>Glicko</em> or <em>Steph</em> as implemented in the <a href="https://cran.r-project.org/package=PlayerRatings">PlayerRating</a> package) or are able to make predictions conditional on additional information (other statistical or machine learning methods) would likely yield better results.</p>
 </div>
 <div id="method" class="section level1">
