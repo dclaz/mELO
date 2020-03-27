@@ -191,8 +191,8 @@
 \]</span> Where <span class="math inline">\(\hat{p}_{ij}\)</span> is the estimated probability of player <span class="math inline">\(i\)</span> beating player <span class="math inline">\(j\)</span>, <span class="math inline">\(r_i\)</span> is the current rating of player <span class="math inline">\(i\)</span>, <span class="math inline">\(\alpha = \ln(10)/400\)</span>, <span class="math inline">\(\gamma_i\)</span> represents the first move or home ground advantage for player <span class="math inline">\(i\)</span> and <span class="math display">\[
   \sigma(x) = \frac{1}{(1+ e^{-x})}.
 \]</span></p>
-<p>After a match, the following rule is used to update ratings <span class="math display">\[
-  r_i^* = r_i + \eta \delta_{ij}
+<p>After a match at time <span class="math inline">\(t\)</span>, the following rule is used to update ratings <span class="math display">\[
+  r_i^{t+1} = r^t_i + \eta \delta_{ij}
 \]</span> where <span class="math inline">\(\eta\)</span> is the learning rate and <span class="math inline">\(\delta = \hat{p}_{ij} - y\)</span> where <span class="math inline">\(y \in \{0, 1\}\)</span> is the outcome of the match for player <span class="math inline">\(i\)</span>.</p>
 <p>The following code fits a standard Elo model using the <code><a href="../reference/ELO.html">ELO()</a></code> function with a default <code>eta</code> (the learning rate) and <code>p1_advantage</code> (Player 1 advantage i.e; first mover or home ground advantage).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Fit model</span></a>
@@ -283,11 +283,11 @@
   \hat{p}_{ij} = \sigma (\alpha(r_i + \gamma_i - r_j + \textbf{c}_i \Omega \textbf{c}_j' ))
 \]</span> where <span class="math inline">\(\Omega\)</span> is a <span class="math inline">\(2k \times 2k\)</span> matrix constructed such that <span class="math display">\[
   \Omega = \sum_{i=1}^{k} (\textbf{e}_{2i-1} \textbf{e}_{2i}' - \textbf{e}_{2i} \textbf{e}_{2i-1}')
-\]</span> and <span class="math inline">\(\textbf{c}_i\)</span> is a row vector of the <span class="math inline">\(m \times 2k\)</span> dimension  matrix which encodes the non-transitive interactions between the <span class="math inline">\(m\)</span> agents or players. <span class="math inline">\(\textbf{e}_j\)</span> are standard basis vectors spanning the columns of <span class="math inline">\(\Omega\)</span>. Larger <span class="math inline">\(k\)</span> allows for better estimates in situations with more complex dynamics, which we will observe later.</p>
+\]</span> and <span class="math inline">\(\textbf{c}_i\)</span> is a row vector of the <span class="math inline">\(m \times 2k\)</span> dimension <span class="math inline">\(\textbf{C}\)</span> matrix which encodes the non-transitive interactions between the <span class="math inline">\(m\)</span> agents or players. <span class="math inline">\(\textbf{e}_j\)</span> are standard basis vectors spanning the columns of <span class="math inline">\(\Omega\)</span>. Larger <span class="math inline">\(k\)</span> allows for better estimates in situations with more complex dynamics, which we will observe later.</p>
 <p>After a match, the following rules are used to update ratings <span class="math display">\[
-  r_i^* = r_i + \eta_1 \delta_{ij},
+  r_i^{t+1} = r^t_i + \eta_1 \delta_{ij},
 \]</span> <span class="math display">\[
-\textbf{c}_i^* = \textbf{c}_i + \eta_2 \delta_{ij} \Omega \textbf{c}_j
+\textbf{c}_i^{t+1} = \textbf{c}^t_i + \eta_2 \delta_{ij} \Omega \textbf{c}^t_j
 \]</span> where <span class="math inline">\(\eta_1\)</span> and <span class="math inline">\(\eta_2\)</span> are the learning rates for the ratings vector <span class="math inline">\(\textbf{r}\)</span> and <span class="math inline">\(\textbf{C}\)</span> matrix respectively.</p>
 <p>The following code fits a mELO model using the <code><a href="../reference/mELO.html">mELO()</a></code> function with a default <span class="math inline">\(k=1\)</span>, learning rates and player 1 advantage parameters.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Fit model</span></a>
@@ -406,7 +406,7 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(rps_mELO)</a></code></pre></div>
 <p><img src="01_introduction_files/figure-html/rps_mELO_3-1.png" width="700"></p>
 <p>The mELO ratings quickly stabilise, but we note that the ratings aren’t all equal which we might expect for agents that exhibit perfectly cyclical dynamics. However, the ratings by themselves are not the only things that matter when making predictions from a mELO model. Let <span class="math display">\[
-\textbf{A} = \textbf{c} \Omega \textbf{c}' 
+\textbf{A} = \textbf{C} \Omega \textbf{C}' 
 \]</span> be the <span class="math inline">\(m \times m\)</span> advantage-disadvantage matrix for our model, where <span class="math inline">\(a_{ij}\)</span> is the advantage agent <span class="math inline">\(i\)</span> has over agent <span class="math inline">\(j\)</span>. mELO uses elements of this matrix when making predictions. The <span class="math inline">\(\textbf{A}\)</span> matrix can be obtained from a mELO model using <code><a href="../reference/get_adv_mat.html">get_adv_mat()</a></code></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/get_adv_mat.html">get_adv_mat</a></span>(rps_mELO) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">0</span>) <span class="op">%&gt;%</span></a>
@@ -454,6 +454,10 @@
 <img src="images/rpsfw.png"></p>
 <p>Observe that fire beats everything except water, and water loses to everything except fire.</p>
 <p>Knowing that a regular Elo model will obviously fail to model this situation accurately, we will begin by fitting a mELO model with <span class="math inline">\(k=1\)</span></p>
+<div id="melo-model-with-k1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#melo-model-with-k1" class="anchor"></a>mELO model with <span class="math inline">\(k=1\)</span>
+</h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">rpsfw_mELO_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mELO.html">mELO</a></span>(rpsfw_df, <span class="dt">k=</span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb11-2" title="2">rpsfw_mELO_<span class="dv">1</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt; </span></a>
@@ -502,6 +506,11 @@
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/plot_c_mat.html">plot_c_mat</a></span>(rpsfw_mELO_<span class="dv">1</span>)</a></code></pre></div>
 <p><img src="01_introduction_files/figure-html/rps_mELO_7-2.png" width="700"></p>
 <p>Further playing around with learning rate parameters and the number of training matches fails to improve these results. Let’s fit a mELO model with <span class="math inline">\(k=2\)</span> which should have more capacity to capture the non-transitive dynamics exhibited here.</p>
+</div>
+<div id="melo-model-with-k2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#melo-model-with-k2" class="anchor"></a>mELO model with <span class="math inline">\(k=2\)</span>
+</h3>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">rpsfw_mELO_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mELO.html">mELO</a></span>(rpsfw_df, <span class="dt">k=</span><span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb14-2" title="2">rpsfw_mELO_<span class="dv">2</span></a>
 <a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt; </span></a>
@@ -552,6 +561,7 @@
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="../reference/plot_c_mat.html">plot_c_mat</a></span>(rpsfw_mELO_<span class="dv">2</span>)</a></code></pre></div>
 <p><img src="01_introduction_files/figure-html/rpsfw_mELO_9-2.png" width="700"></p>
 <p>Whilst an ordinary Elo model and mELO model with <span class="math inline">\(k=1\)</span> fails to capture the dynamics rock-paper-scissors-fire-water, a mELO model with <span class="math inline">\(k=2\)</span> succeeds.</p>
+</div>
 </div>
 </div>
 <div id="other-features" class="section level1">

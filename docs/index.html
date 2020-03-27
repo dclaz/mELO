@@ -121,9 +121,9 @@
 <p>and it can be loaded using:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(mELO)</a></code></pre></div>
 </div>
-<div id="introduction" class="section level2">
+<div id="vignettes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<a href="#vignettes" class="anchor"></a>Vignettes</h2>
 <p>The following vignettes describe the functionality and utility of the package in more detail:</p>
 <ol>
 <li>
@@ -131,7 +131,7 @@
 <li>
 <a href="https://dclaz.github.io/mELO/articles/02_afl.html">Application to AFL matches</a>. An investigation of whether there is any evidence of non-transitive relationships in AFL match outcomes.</li>
 <li>
-<a href="https://dclaz.github.io/mELO/articles/03_noise.html">Impact of noisy outcomes in mELO models</a>. An investigation into how noise impacts the estimation abilities and/or theprediction accuracy of a mELO model.</li>
+<a href="https://dclaz.github.io/mELO/articles/03_noise.html">Impact of noisy or probabilistic outcomes in mELO models</a>. An investigation into how noise or probabilistic outcomes impacts the estimation abilities and/or the prediction accuracy of a mELO model.</li>
 </ol>
 </div>
 <div id="example" class="section level2">
@@ -196,9 +196,9 @@
 <a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; k = 1.</span></a>
 <a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt;     Player Rating Games Win Draw Loss Lag</span></a>
-<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt; 1    PAPER 2208.6    80  40    0   40   0</span></a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; 2     ROCK 2200.3    80  40    0   40   1</span></a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; 3 SCISSORS 2191.1    80  40    0   40   0</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt; 1 SCISSORS 2207.3    80  40    0   40   0</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; 2    PAPER 2197.9    80  40    0   40   0</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; 3     ROCK 2194.8    80  40    0   40   1</span></a>
 <a class="sourceLine" id="cb4-15" title="15"></a>
 <a class="sourceLine" id="cb4-16" title="16"><span class="co"># Get predictions</span></a>
 <a class="sourceLine" id="cb4-17" title="17">mELO_preds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(</a>
@@ -243,12 +243,12 @@
 <td>ROCK</td>
 <td align="right">0.001</td>
 <td align="right">0.500</td>
-<td align="right">0.999</td>
+<td align="right">0.998</td>
 </tr>
 <tr class="odd">
 <td>SCISSORS</td>
 <td align="right">0.999</td>
-<td align="right">0.001</td>
+<td align="right">0.002</td>
 <td align="right">0.500</td>
 </tr>
 </tbody>

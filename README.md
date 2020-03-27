@@ -140,9 +140,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1 SCISSORS 2206.0    80  40    0   40   0
-#> 2    PAPER 2202.7    80  40    0   40   0
-#> 3     ROCK 2191.3    80  40    0   40   1
+#> 1 SCISSORS 2207.3    80  40    0   40   0
+#> 2    PAPER 2197.9    80  40    0   40   0
+#> 3     ROCK 2194.8    80  40    0   40   1
 
 # Get predictions
 mELO_preds <- predict(
@@ -157,10 +157,10 @@ cbind(
 )
 #>   time_index  throw_1  throw_2 outcome mELO_preds
 #> 1          1    PAPER     ROCK       1      0.999
-#> 2          2     ROCK SCISSORS       1      0.998
+#> 2          2     ROCK SCISSORS       1      0.999
 #> 3          3 SCISSORS    PAPER       1      0.999
 #> 4          4     ROCK    PAPER       0      0.001
-#> 5          5 SCISSORS     ROCK       0      0.002
+#> 5          5 SCISSORS     ROCK       0      0.001
 #> 6          6    PAPER SCISSORS       0      0.001
 ```
 
