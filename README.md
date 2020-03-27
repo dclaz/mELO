@@ -46,7 +46,7 @@ and it can be loaded using:
 library(mELO)
 ```
 
-## Introduction
+## Vignettes
 
 The following vignettes describe the functionality and utility of the
 package in more detail:
@@ -59,10 +59,10 @@ package in more detail:
     matches](https://dclaz.github.io/mELO/articles/02_afl.html). An
     investigation of whether there is any evidence of non-transitive
     relationships in AFL match outcomes.
-3.  [Impact of noisy outcomes in mELO
+3.  [Impact of noisy or probabilistic outcomes in mELO
     models](https://dclaz.github.io/mELO/articles/03_noise.html). An
-    investigation into how noise impacts the estimation abilities and/or
-    theprediction accuracy of a mELO model.
+    investigation into how noise or probabilistic outcomes impacts the
+    estimation abilities and/or the prediction accuracy of a mELO model.
 
 ## Example
 
@@ -140,9 +140,9 @@ rps_mELO
 #> k = 1.
 #> 
 #>     Player Rating Games Win Draw Loss Lag
-#> 1    PAPER 2208.6    80  40    0   40   0
-#> 2     ROCK 2200.3    80  40    0   40   1
-#> 3 SCISSORS 2191.1    80  40    0   40   0
+#> 1 SCISSORS 2206.0    80  40    0   40   0
+#> 2    PAPER 2202.7    80  40    0   40   0
+#> 3     ROCK 2191.3    80  40    0   40   1
 
 # Get predictions
 mELO_preds <- predict(
@@ -157,10 +157,10 @@ cbind(
 )
 #>   time_index  throw_1  throw_2 outcome mELO_preds
 #> 1          1    PAPER     ROCK       1      0.999
-#> 2          2     ROCK SCISSORS       1      0.999
+#> 2          2     ROCK SCISSORS       1      0.998
 #> 3          3 SCISSORS    PAPER       1      0.999
 #> 4          4     ROCK    PAPER       0      0.001
-#> 5          5 SCISSORS     ROCK       0      0.001
+#> 5          5 SCISSORS     ROCK       0      0.002
 #> 6          6    PAPER SCISSORS       0      0.001
 ```
 
@@ -179,8 +179,8 @@ model_pred_mat(
 |          | PAPER |  ROCK | SCISSORS |
 | -------- | ----: | ----: | -------: |
 | PAPER    | 0.500 | 0.999 |    0.001 |
-| ROCK     | 0.001 | 0.500 |    0.999 |
-| SCISSORS | 0.999 | 0.001 |    0.500 |
+| ROCK     | 0.001 | 0.500 |    0.998 |
+| SCISSORS | 0.999 | 0.002 |    0.500 |
 
 The mELO model with `k=1` *can* handle the cyclic, non-transitive nature
 of this system which results in much more accurate predictions. The `k`

@@ -58,8 +58,8 @@ in more detail:
 the **mELO** package with examples for evaluating agents with cyclic and other more complex non-transitive interaction properties.
 2. [Application to AFL matches](https://dclaz.github.io/mELO/articles/02_afl.html). 
 An investigation of whether there is any evidence of non-transitive relationships in AFL match outcomes.
-3. [Impact of noisy outcomes in mELO models](https://dclaz.github.io/mELO/articles/03_noise.html). An investigation into 
-how noise impacts the estimation abilities and/or  theprediction accuracy of a mELO model.
+3. [Impact of noisy or probabilistic outcomes in mELO models](https://dclaz.github.io/mELO/articles/03_noise.html). An investigation into 
+how noise or probabilistic outcomes impacts the estimation abilities and/or the prediction accuracy of a mELO model.
 
 
 ## Example

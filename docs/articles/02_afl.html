@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Application of mELO to AFL matches • mELO</title>
+<title>Application of mELO ratings to AFL matches • mELO</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Application of mELO to AFL matches">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Application of mELO ratings to AFL matches">
 <meta property="og:description" content="">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
@@ -64,10 +64,10 @@
       <a href="../articles/01_introduction.html">Introduction to mELO ratings</a>
     </li>
     <li>
-      <a href="../articles/02_afl.html">Application of mELO to AFL matches</a>
+      <a href="../articles/02_afl.html">Application of mELO ratings to AFL matches</a>
     </li>
     <li>
-      <a href="../articles/03_noise.html">Impact of noisy outcomes in mELO models</a>
+      <a href="../articles/03_noise.html">Impact of noisy or probabilistic outcomes in mELO models</a>
     </li>
   </ul>
 </li>
@@ -92,10 +92,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Application of mELO to AFL matches</h1>
+      <h1>Application of mELO ratings to AFL matches</h1>
                         <h4 class="author">David Lazaridis</h4>
             
-            <h4 class="date">2020-03-24</h4>
+            <h4 class="date">2020-03-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dclaz/mELO/blob/master/vignettes/02_afl.Rmd"><code>vignettes/02_afl.Rmd</code></a></small>
       <div class="hidden name"><code>02_afl.Rmd</code></div>
@@ -107,7 +107,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>As demonstrated in the <a href="introduction.html">introductory vignette</a>, Elo and other methods that rely on a single parameter that describe an agents ability cannot accomodate scenarios with cyclical or non-transitive interactions amongst agents or players. In situations where these behaviours are expected, a mELO model is likely to achieve far better results than an Elo model provided the outcomes aren’t too noisy and the agents abilities are locally stationary.</p>
+<p>As demonstrated in the <a href="01_introduction.html">introductory vignette</a>, Elo and other methods that rely on a single parameter that describe an agents ability cannot accomodate scenarios with cyclical or non-transitive interactions amongst agents or players. In situations where these behaviours are expected, a mELO model is likely to achieve far better results than an Elo model provided the outcomes aren’t too noisy and the agents abilities are locally stationary.</p>
 <p><strong>Note:</strong> <em>Stationarity is important</em>. If agents <em>true</em> abilities change too fast, statistical methods are not likely to yield useful estimates or predictions.</p>
 <p>In this document we will use the <strong>mELO</strong> package to see if a mELO model can outperform a regular Elo model for the task of predicting the outcome of <a href="https://en.wikipedia.org/wiki/Australian_Football_League">AFL</a> matches. We do not expect the performance of the mELO model to be amazing. Other methods for predicting match outcomes that are more highly parameterised (such as <em>Glicko</em> or <em>Steph</em> as implemented in the <a href="https://cran.r-project.org/package=PlayerRatings">PlayerRating</a> package) or are able to make predictions conditional on additional information (other statistical or machine learning methods) would likely yield better results.</p>
 </div>
@@ -160,17 +160,9 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Load essential packages</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(mELO)</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt;     filter, lag</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
-<a class="sourceLine" id="cb1-12" title="12"></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="co"># Inspect AFL match data</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(afl_df) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>()</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># Inspect AFL match data</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(afl_df) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>()</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">match_index</th>
@@ -522,13 +514,13 @@
 <li>Find an improved initialisation of the <span class="math inline">\(\textbf{C}\)</span> matrix.</li>
 </ul>
 <p>Interestingly, the mELO model obtains inferior performance even on the training data. Adjusting the base team ratings with the <span class="math inline">\(\textbf{A}\)</span> matrix when making predictions hurts performance if the <span class="math inline">\(\textbf{c}\)</span> cannot be learned properly.</p>
-<p>If we look at the <span class="math inline">\(\textbf{c}\)</span> vector plots for the rock-paper-scissors-fire-water example in the <a href="introduction.html#rock-paper-scissors-fire-water">introductory vignette</a>, we observe that even in that much simpler game, with fewer teams and no noise in the outcomes, it still takes ~75 mathes before the <span class="math inline">\(\textbf{c}\)</span> stablise and the predictions become accurate and we can be confident that the dynamics of the game have been captured. In contract, the AFL match data is far noisier<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, with far fewer reptitions of matches and where we actually expect the <em>true ability</em> of teams to actually change in time due to changes to rosters, coaching and other factors.</p>
+<p>If we look at the <span class="math inline">\(\textbf{c}\)</span> vector plots for the rock-paper-scissors-fire-water example in the <a href="01_introduction.html#rock-paper-scissors-fire-water">introductory vignette</a>, we observe that even in that much simpler game, with fewer teams and no noise in the outcomes, it still takes ~75 mathes before the <span class="math inline">\(\textbf{c}\)</span> stablise and the predictions become accurate and we can be confident that the dynamics of the game have been captured. In contract, the AFL match data is far noisier<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, with far fewer reptitions of matches and where we actually expect the <em>true ability</em> of teams to actually change in time due to changes to rosters, coaching and other factors.</p>
 <p>For the AFL data, we suspect that the <span class="math inline">\(\textbf{c}\)</span> vectors cannot be learned adequately as they cannot keep up with the noisy dynamics of the environment and thus the resulting adjustments to predictions only hurt performance. If the learning rate (<span class="math inline">\(\eta_2\)</span>) is too low, the model won’t learn much about the current regime before it changes, if it is too high, it will overfit to the most recent matches.</p>
 </div>
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>In the sense that two teams could play twice and results of the two matches could be very different. This doesn’t happer in rock-scissors-paper and its variants. The impact of noise in outcomes for mELO models is explored in the <a href="noise.html">this vignette</a>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>In the sense that two teams could play twice and results of the two matches could be very different. This doesn’t happer in rock-scissors-paper and its variants. The impact of noise in outcomes for mELO models is explored in the <a href="03_noise.html">this vignette</a>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
   </div>

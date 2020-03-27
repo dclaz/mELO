@@ -104,10 +104,10 @@ the matrix is calculated as \(C \Omega C'\)." />
       <a href="../articles/01_introduction.html">Introduction to mELO ratings</a>
     </li>
     <li>
-      <a href="../articles/02_afl.html">Application of mELO to AFL matches</a>
+      <a href="../articles/02_afl.html">Application of mELO ratings to AFL matches</a>
     </li>
     <li>
-      <a href="../articles/03_noise.html">Impact of noisy outcomes in mELO models</a>
+      <a href="../articles/03_noise.html">Impact of noisy or probabilistic outcomes in mELO models</a>
     </li>
   </ul>
 </li>
@@ -161,17 +161,17 @@ the matrix is calculated as \(C \Omega C'\).</p>
     <pre class="examples"><div class='input'><span class='co'># rock paper scissors model</span>
 <span class='no'>rps_model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mELO.html'>mELO</a></span>(<span class='no'>rps_df</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>1</span>)
 <span class='fu'>get_adv_mat</span>(<span class='no'>rps_model</span>)</div><div class='output co'>#&gt;              PAPER      ROCK  SCISSORS
-#&gt; PAPER        0.000  1154.133 -1161.866
-#&gt; ROCK     -1154.133     0.000  1120.599
-#&gt; SCISSORS  1161.866 -1120.599     0.000</div><div class='input'>
+#&gt; PAPER        0.000  1129.888 -1148.595
+#&gt; ROCK     -1129.888     0.000  1159.810
+#&gt; SCISSORS  1148.595 -1159.810     0.000</div><div class='input'>
 <span class='co'># rock paper scissors fire water model</span>
 <span class='no'>rpsfw_model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mELO.html'>mELO</a></span>(<span class='no'>rpsfw_df</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='fu'>get_adv_mat</span>(<span class='no'>rpsfw_model</span>)</div><div class='output co'>#&gt;               FIRE     PAPER      ROCK  SCISSORS     WATER
-#&gt; FIRE         0.000  1133.963  1100.406  1223.997 -1237.279
-#&gt; PAPER    -1133.963     0.000  1178.821 -1359.407  1102.124
-#&gt; ROCK     -1100.406 -1178.821     0.000  1729.258  1213.110
-#&gt; SCISSORS -1223.997  1359.407 -1729.258     0.000  1231.487
-#&gt; WATER     1237.279 -1102.124 -1213.110 -1231.487     0.000</div></pre>
+#&gt; FIRE         0.000  1088.883  1019.533  1144.676 -1295.743
+#&gt; PAPER    -1088.883     0.000  1080.482 -1101.475  1042.268
+#&gt; ROCK     -1019.533 -1080.482     0.000  1449.347  1148.863
+#&gt; SCISSORS -1144.676  1101.475 -1449.347     0.000  1157.556
+#&gt; WATER     1295.743 -1042.268 -1148.863 -1157.556     0.000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

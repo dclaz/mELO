@@ -104,10 +104,10 @@ for testing models." />
       <a href="../articles/01_introduction.html">Introduction to mELO ratings</a>
     </li>
     <li>
-      <a href="../articles/02_afl.html">Application of mELO to AFL matches</a>
+      <a href="../articles/02_afl.html">Application of mELO ratings to AFL matches</a>
     </li>
     <li>
-      <a href="../articles/03_noise.html">Impact of noisy outcomes in mELO models</a>
+      <a href="../articles/03_noise.html">Impact of noisy or probabilistic outcomes in mELO models</a>
     </li>
   </ul>
 </li>
@@ -149,7 +149,7 @@ for testing models.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>outcome</th>
-      <td><p>Original match outcome. Must be between 0 and 1 inclusive.</p></td>
+      <td><p>Original match outcome. Must be one of 0, 0.5, or 1.</p></td>
     </tr>
     <tr>
       <th>error_prob</th>
@@ -161,6 +161,9 @@ vice-versa</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a numeric vector.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Input outcomes of 0.5 will be randomy rounded to either 0 or 1.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create some sample outcomes</span>
@@ -179,24 +182,26 @@ vice-versa</p></td>
 <span class='no'>test_df</span>$<span class='no'>noisy_outcome</span> <span class='kw'>=</span> <span class='fu'>add_noise_to_outcomes</span>(<span class='no'>test_df</span>$<span class='no'>true_outcome</span>, <span class='kw'>error_prob</span> <span class='kw'>=</span> <span class='fl'>0.1</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>test_df</span>)</div><div class='output co'>#&gt;             noisy_outcome
 #&gt; true_outcome   0   1
-#&gt;            0 449  53
-#&gt;            1  46 452</div><div class='input'>
+#&gt;            0 450  52
+#&gt;            1  47 451</div><div class='input'>
 <span class='no'>test_df</span>$<span class='no'>noisy_outcome</span> <span class='kw'>=</span> <span class='fu'>add_noise_to_outcomes</span>(<span class='no'>test_df</span>$<span class='no'>true_outcome</span>, <span class='kw'>error_prob</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>test_df</span>)</div><div class='output co'>#&gt;             noisy_outcome
 #&gt; true_outcome   0   1
-#&gt;            0 254 248
-#&gt;            1 244 254</div><div class='input'>
+#&gt;            0 256 246
+#&gt;            1 228 270</div><div class='input'>
 <span class='no'>test_df</span>$<span class='no'>noisy_outcome</span> <span class='kw'>=</span> <span class='fu'>add_noise_to_outcomes</span>(<span class='no'>test_df</span>$<span class='no'>true_outcome</span>, <span class='kw'>error_prob</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>test_df</span>)</div><div class='output co'>#&gt;             noisy_outcome
 #&gt; true_outcome   0   1
 #&gt;            0   0 502
-#&gt;            1 498   0</div></pre>
+#&gt;            1 498   0</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

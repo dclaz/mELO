@@ -1,5 +1,5 @@
 ---
-title: "Impact of noisy outcomes in mELO models"
+title: "Impact of noisy or probabilistic outcomes in mELO models"
 author: "David Lazaridis"
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
@@ -8,7 +8,7 @@ output:
     highlight: github
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Impact of noisy outcomes in mELO models}
+  %\VignetteIndexEntry{Impact of noisy or probabilistic outcomes in mELO models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,17 +22,17 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-For the [AFL data](afl.html), we observed that the mELO model did not outperform the standard Elo model, despite the ability to model more complex interactions between teams. We suspect that the $\textbf{C}$ matrix could not be adequately estimated in the presence of noisy outcomes and thus the adjustments to the base ratings only hurt prediction performance. In this setting, we use noisy to mean that the match outcomes come from a probability distribution and thus two teams could play each other twice in the exact same condition and results of the two matches could be very different. 
+For the [AFL data](afl.html), we observed that the mELO model did not outperform the standard Elo model, despite the ability to model more complex interactions between teams. We suspect that the $\textbf{C}$ matrix could not be adequately estimated in the presence of noisy environments with probabilistic outcomes and thus the adjustments to the base ratings only hurt prediction performance. In this setting, we use noisy to mean that the match outcomes come from a probability distribution and thus two teams could play each other twice in the exact same condition and results of the two matches could be very different. 
 
 An additional challenge for the evaluation of sporting clubs, is that their *true* abilities can change in time, but will be difficult to estimate due to random variations in their, and their oponents performances. An Elo model with a learning rate too small, may not track changes in undyling abilities fast enough, a learning rate too high will result in evaluations that are fit to the noise in recent performances.
 
 In this document, we will attempt understand how well a mELO model can capture the dynamics 
-of the [rock-paper-scissors-fire-water](01_introduction.html#rock-paper-scissors-fire-water) game in a controlled environment where the agents never change in underlying ability and we can vary the amount of noise in the outcomes. 
+of the [rock-paper-scissors-fire-water](01_introduction.html#rock-paper-scissors-fire-water) game in a controlled environment where the agents never change in underlying ability but we can vary the amount of noise in the outcomes (or the distribution of outcome probabilities). 
 
 
 # Method
 
-We will perform a series of simulations to assess the estimation abilities of a mELO model with $k=2$ where the ordinary probability of a win is modified to simulate the effect of noise in the outcome.
+We will perform a series of simulations to assess the estimation abilities of a mELO model with $k=2$ where the ordinary probability of a win is modified to simulate the effect of having probabilistic outcomes.
 
 The ordinary rock-paper-scissors-fire-water game (hereon referred to as **rpsfw**) has non-transitive interactions that are described by the following figure:
 
@@ -116,7 +116,7 @@ We observe that `outcome_k010` has very few *errors* whilst `outcome_k50` is ran
 
 Before we begin the simulations, we have to do some work to prepare the data:
 ```{r data_2}
-# Increase sample size
+# Increase sample size of the rpsfw data 
 rpsfw_df_mod <-  do.call(
     "rbind",
     replicate(20, rpsfw_df, simplify = FALSE)
@@ -158,46 +158,33 @@ Furthermore, the error surfaces (both logistic loss or $\mathcal{B}_{\kappa, n}$
 [^1] Even initialising the models with the $\textbf{C}$ matrix obtained from an accurate 
 model built on the regular **rpsfw** does not seem to make things much better.
 
+The code below produces a series of error ($\mathcal{B}_{\kappa, n}$) plots for various combinations of $\kappa, n, \eta_1, \eta_2$ with both random initialisation for $\textbf{C}$ for each fit, and fixing it to be equal at $t=0$ for each model fit. It takes a while to run.
 
+```{r simulations_1, eval=FALSE}
 
-```{r simulations_1}
-model <- mELO(
-  current_rpsfw_df_mod,
-  k = 2,
-  eta_1 = 20,
-  eta_2 = 0.4,
-  save_history = TRUE
-)
-
-
-params_map <- matrix(
-  c(
-    231, 500, 0.3, 23421,
-    231, 500, 0.3, 3432,
-    12345, 500, 0.3, 23421,
-    12345, 500, 0.3, 3432,
-  ),
-  ncol = 4,
-  byrow = TRUE
-)
-
-# Init with good C matrix
-
+# Data param combinations will iterate through
 params_map <- expand.grid(
   n = c(250, 500, 1000, 2000),
   kappa = c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4)
 )
 
+# Learning rates
+eta_1_vec <- seq(1, 30, length.out = 40)
+eta_2_vec <- seq(0.05, 0.9, length.out = 40)
+
+# Fixed seed for C matrix init
+fix_seed_for_c_matrix_init <- FALSE
+
+# Store results/plots in list
 plot_list <- list()
 
+# Loop
 for (k in 1:nrow(params_map)){
-  
-  print_time_status(k)
-  print_time_status(params_map[k,])
-  
+
+  # Get data ready for given n and kappa
   set.seed(231)
-  n <- params_map$n[k] #500
-  kappa <- params_map$kappa[k] #0.1
+  n <- params_map$n[k] 
+  kappa <- params_map$kappa[k] 
   
   current_rpsfw_df_mod <- rpsfw_df_mod %>%
     mutate(
@@ -212,14 +199,14 @@ for (k in 1:nrow(params_map)){
       outcome = ifelse(outcome == 0, kappa, outcome)
     )
   
-  
-  
-  
+  # Function to get Brier or logloss errors
   error_calc <- function(hyperparams){
-    set.seed(3432)
+    
+    if(fix_seed_for_c_matrix_init){set.seed(3432)}
+    
     model <- mELO(
       current_rpsfw_df_mod,
-      #init_c_mat = good_c_mat,
+      # init_c_mat = good_c_mat,
       k = 2,
       eta_1 = hyperparams[1],
       eta_2 = hyperparams[2],
@@ -237,14 +224,13 @@ for (k in 1:nrow(params_map)){
   
   }
   
-  # Plot
-  eta_1_vec <- seq(1, 30, length.out = 40)
-  eta_2_vec <- seq(0.05, 0.9, length.out = 40)
+  # Generate data for plot
   error_mat <- matrix(
     NA,
     nrow = length(eta_1_vec),
     ncol = length(eta_2_vec)
   )
+  # Begin loop
   for (i in 1:length(eta_1_vec)){
     for(j in 1:length(eta_2_vec)){
       error_mat[i,j] <- error_calc(
@@ -252,7 +238,7 @@ for (k in 1:nrow(params_map)){
       )
     }
   }
-  
+  # fix labels
   rownames(error_mat) <- eta_1_vec
   colnames(error_mat) <- eta_2_vec
   
@@ -268,8 +254,7 @@ for (k in 1:nrow(params_map)){
       as_tibble() %>%
       mutate(eta_2 = as.numeric(eta_2))
   
-  #error_mat_df %>% filter(value == min(value))
-  
+  # construct error plot
   error_plot <- error_mat_df %>%
       ggplot(
           aes(
@@ -285,109 +270,39 @@ for (k in 1:nrow(params_map)){
       ) +
       xlab(expression("Learning rate (eta_1)")) +
       ylab(paste0("Learning rate (eta_2)"))
-
-  plot_list[[k]] <- error_plot
+  
+  # store plot
+  plot_list_2[[k]] <- error_plot
 
 }
 
-
-  
-
-
-
-
-pars <- error_mat_df %>% filter(value==min(value))
-  model <- mELO(
-    current_rpsfw_df_mod,
-    k = 2,
-    eta_1 = pars$eta_1,
-    eta_2 = pars$eta_2,
-    save_history = TRUE
-  )
-
-
-  model <- mELO(
-    current_rpsfw_df_mod,
-    k = 2,
-    eta_1 = 16,
-    eta_2 = 1,
-    save_history = TRUE
-  )
-  
-good_c_mat <- model$c_mat
-
-preds <- predict(
-  model,
-  current_test_df
-)
-data.frame(current_test_df, preds = preds %>% round(2)) %>%
-  arrange(-abs(preds - outcome))
-    
 ```
 
-# Remedies
+## Random initialisation of $\textbf{C}$ accross hyperparameters
+```{r plots_1}
+# Loop through plots
+for (i in 1:length(plot_list)){
+  print(plot_list[[i]])
+}
+```
 
-Some ideas that could be implemented to improve the mELO models:
-
-* Regularisation for the $\textbf{c}$ vectors.
-* Momentum for the $\textbf{c}$ vectors.
-
-# Random functions
-
-
-```{r functions}
-# Function that calculates the score for a single replication 
-optim_inner_brier_score <- function(kappa, n){
-  
-    current_rpsfw_df_mod <- rpsfw_df_mod %>%
-      mutate(
-        outcome = add_noise_to_outcomes(outcome, error_prob = kappa),
-        outcome = ifelse(throw_1 == throw_2, 0.5, outcome)
-      ) %>%
-      slice(1:n)
-    
-    current_test_df <- test_df %>%
-      mutate(
-        outcome = ifelse(outcome == 1, 1-kappa, outcome),
-        outcome = ifelse(outcome == 0, kappa, outcome)
-      )
-    
-  error_calc <- function(hyperparams){
-
-    model <- mELO(
-      current_rpsfw_df_mod,
-      k = 2,
-      eta_1 = hyperparams[1],
-      eta_2 = hyperparams[2],
-      save_history = FALSE
-    )
-    
-    preds <- predict(
-      model,
-      current_test_df
-    )
-    
-    error <- mean((current_test_df$outcome - preds)^2)
-    error
-  
-  }
-  
-  opt_par <- optim(
-    c(16, 0.4),
-    error_calc,
-    method = "L-BFGS-B",
-    lower = c(5, 0.)
-  )
-  
-  results <- list()
-  results$par <- opt_par$par
-  results$value <- opt_par$value
-  return(results)
-  
+## Fixed initialisation of $\textbf{C} accross hyperparameters
+```{r plots_2}
+# Loop through plots
+for (i in 1:length(plot_list_2)){
+  print(plot_list_2[[i]])
 }
 ```
 
 # Conclusion
+
+Care must be taken when optimising hyperparameters for mELO models, especially in the presense of probabilistic outcomes. Some ideas that could be implemented to improve the reliability of optimising mELO models:
+
+* Better initialisation of the $\textbf{c}$ vectors.
+* Regularisation for the $\textbf{c}$ vectors.
+* Momentum for the $\textbf{c}$ vectors.
+
+
 
 
 

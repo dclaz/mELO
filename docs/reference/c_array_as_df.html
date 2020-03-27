@@ -104,10 +104,10 @@ plotting diagnostics." />
       <a href="../articles/01_introduction.html">Introduction to mELO ratings</a>
     </li>
     <li>
-      <a href="../articles/02_afl.html">Application of mELO to AFL matches</a>
+      <a href="../articles/02_afl.html">Application of mELO ratings to AFL matches</a>
     </li>
     <li>
-      <a href="../articles/03_noise.html">Impact of noisy outcomes in mELO models</a>
+      <a href="../articles/03_noise.html">Impact of noisy or probabilistic outcomes in mELO models</a>
     </li>
   </ul>
 </li>
@@ -161,13 +161,13 @@ plotting diagnostics.</p>
     <pre class="examples"><div class='input'><span class='co'># rock paper scissors fire water model</span>
 <span class='no'>rpsfw_model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mELO.html'>mELO</a></span>(<span class='no'>rpsfw_df</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='no'>c_mat_df</span> <span class='kw'>&lt;-</span> <span class='fu'>c_array_as_df</span>(<span class='no'>rpsfw_model</span>$<span class='no'>c_mat_history</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>c_mat_df</span>)</div><div class='output co'>#&gt;   Player time        c_1       c_2      c_3        c_4
-#&gt; 1   FIRE    1  -9.290009 -3.577590 7.538899 -0.2613253
-#&gt; 2   FIRE    2  -9.290009 -3.577590 7.538899 -0.2613253
-#&gt; 3   FIRE    3 -12.297388 -7.650964 2.054910  2.8650375
-#&gt; 4   FIRE    4 -12.297388 -7.650964 2.054910  2.8650375
-#&gt; 5   FIRE    5 -12.297388 -7.650964 2.054910  2.8650375
-#&gt; 6   FIRE    6 -12.297388 -7.650964 2.054910  2.8650375</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>c_mat_df</span>)</div><div class='output co'>#&gt;   Player time      c_1      c_2      c_3       c_4
+#&gt; 1   FIRE    1 8.807558 4.656891 4.043954 -4.179362
+#&gt; 2   FIRE    2 8.807558 4.656891 4.043954 -4.179362
+#&gt; 3   FIRE    3 2.628271 9.329291 3.968360 -8.138085
+#&gt; 4   FIRE    4 2.628271 9.329291 3.968360 -8.138085
+#&gt; 5   FIRE    5 2.628271 9.329291 3.968360 -8.138085
+#&gt; 6   FIRE    6 2.628271 9.329291 3.968360 -8.138085</div><div class='input'>
 <span class='co'># Plot the evolution of C vectors for each throw</span>
 <span class='co'># Make data a bit 'tidyer'</span>
 <span class='no'>tidy_c_mat_df</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(
