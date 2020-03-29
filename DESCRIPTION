@@ -2,8 +2,11 @@ Package: mELO
 Type: Package
 Title: Multidimensional Elo Ratings
 Version: 0.1.0
-Authors@R: person("David", "Lazaridis", email = "davidlaz@gmail.com",
-                  role = c("aut", "cre"))
+Authors@R: person(
+    "David", "Lazaridis", 
+    email = "davidlaz@gmail.com",
+    role = c("aut", "cre")
+    )
 Description: An implementation of DeepMind's multidimensional Elo rating (mELO) 
     approach for evaluating agents. The mELO rating system has the desirable properties of being able 
     to handle cyclic interactions and is better behaved in the presence of 
