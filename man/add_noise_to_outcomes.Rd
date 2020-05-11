@@ -17,7 +17,7 @@ a numeric vector.
 }
 \description{
 This function can be used to flip a set proportion of match outcomes. Useful
-for testing models.
+for testing models under varying levels of signal to noise ratios.
 }
 \details{
 Input outcomes of 0.5 will be randomy rounded to either 0 or 1.

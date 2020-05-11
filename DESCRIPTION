@@ -27,5 +27,5 @@ Imports:
     tidyr,
     magrittr,
     viridisLite
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 URL: https://dclaz.github.io/mELO, https://github.com/dclaz/mELO

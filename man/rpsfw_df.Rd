@@ -4,13 +4,15 @@
 \name{rpsfw_df}
 \alias{rpsfw_df}
 \title{Rock Paper Scissors Fire Water data}
-\format{A data frame with four variables:
+\format{
+A data frame with four variables:
 \describe{
 \item{\code{time_index}}{Time point match was played.}
 \item{\code{throw_1}}{Throw 1.}
 \item{\code{throw_2}}{Throw 2.}
 \item{\code{outcome}}{Outcome of the match.}
-}}
+}
+}
 \usage{
 rpsfw_df
 }
