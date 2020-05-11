@@ -1,32 +1,3 @@
-find_C_given_A <- function(A_mat, k=1){
-
-    Omega_mat <- construct_omega(k)
-
-    error_fn <- function(C_vec){
-        C_mat <- matrix(C_vec, ncol=2*k, nrow=ncol(A_mat))
-        error <- sum((A_mat - C_mat %*% Omega_mat %*% t(C_mat))^2)
-    }
-
-    optim_C <- optim(
-        rnorm(ncol(A_mat)*2*k),
-        error_fn,
-        method = "BFGS"
-    )
-
-    C_mat <- matrix(optim_C$par, ncol=2*k, nrow=ncol(A_mat))
-
-    A_svd_d <- round(svd(A_mat)$d, 2)
-    est_req_k <- length(unique(A_svd_d[A_svd_d > 0]))
-
-    results <- list()
-    results$C_mat <- C_mat
-    results$error <- optim_C$value
-    results$est_req_k <- est_req_k
-
-    return(results)
-}
-
-
 
 
 
@@ -48,8 +19,8 @@ construct_omega <- function(k){
 # Generate C mat
 set.seed(112123)
 
-m <- 40
-k <- 2
+m <- 4
+k <- 1
 C_mat <- matrix(
     runif(m*2*k, 0, 10),
     ncol = 2*k
@@ -58,6 +29,9 @@ C_mat <- matrix(
 
 Omega_mat <- construct_omega(k)
 A_mat <- C_mat %*% Omega_mat %*% t(C_mat)
+
+C_mat_list <- find_C_given_A(A_mat)
+C_mat_list
 
 # Now lets decompose A and see if we can get back some reconstruction of C
 svd_A <- svd(A_mat) #, nu = 2*k, nv = 2*k)
@@ -116,12 +90,35 @@ svd(A_rpsfw)$d %>% round(3)
 rpssl_mELO <- mELO(rpssl_df, k=1)
 
 
-estimatge_A_from_data <- function(
-    data,
-    baseline = 2200
+
+data <- rpsfw_df
+data$outcome = add_noise_to_outcomes(data$outcome, error_prob = 0.5)
+
+
+
+est_A_from_data <- function(
+    data
 ){
 
+    alpha <- log(10)/400
 
+    mat_temp <- data %>%
+        #filter(throw_1 != throw_2) %>%
+        group_by(throw_1, throw_2) %>%
+        summarise(outcome = sum(outcome)) %>%
+        ungroup() %>%
+        spread(throw_2, outcome) %>%
+        select(-throw_1) %>%
+        as.matrix()
+
+    mat <- mat_temp / (mat_temp + t(mat_temp))
+    rownames(mat) <- colnames(mat)
+    mat[is.na(mat)] <- 0
+
+    A_mat <- -1*log(1/mat - 1)/alpha
+    A_mat <- A_mat %>% pmin(1000) %>% pmax(-1000)
+
+    return(A_mat)
 
 }
 
