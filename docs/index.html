@@ -12,10 +12,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Multidimensional Elo Ratings">
 <meta property="og:description" content="An implementation of DeepMinds multidimensional Elo rating (mELO) 
     approach for evaluating agents. The mELO rating system has the desirable properties of being able 
@@ -23,13 +24,12 @@
     redundant copies of agents or tasks. This package uses code directly from 
     Alec Stephenson and Jeff Sonass excellent PlayerRatings package (v1.0-3, 2019-02-22).">
 <meta property="og:image" content="/logo.png">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -78,7 +78,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/dclaz/mELO">
+  <a href="https://github.com/dclaz/mELO/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -117,9 +117,9 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the <code>mELO</code> package from github using:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"dclaz/mELO"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"dclaz/mELO"</span>)</pre></div>
 <p>and it can be loaded using:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(mELO)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mELO</span>)</pre></div>
 </div>
 <div id="vignettes" class="section level2">
 <h2 class="hasAnchor">
@@ -140,91 +140,92 @@
 <p>The example below demonstrates how a ratings model can be fit using the <code><a href="reference/ELO.html">ELO()</a></code> and <code><a href="reference/mELO.html">mELO()</a></code> functions.</p>
 <p>We will fit models to predict the outcome of <strong>rock-paper-scissor</strong> matches. It contains 120 matches.</p>
 <p align="center">
+</p>
+<p><img src="articles/images/rps.png"></p>
 
-<img src="articles/images/rps.png"></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Inspect rock paper scissors data</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(rps_df)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;   time_index  throw_1  throw_2 outcome</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; 1          1    PAPER     ROCK       1</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; 2          2     ROCK SCISSORS       1</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; 3          3 SCISSORS    PAPER       1</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; 4          4     ROCK    PAPER       0</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; 5          5 SCISSORS     ROCK       0</span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; 6          6    PAPER SCISSORS       0</span></a>
-<a class="sourceLine" id="cb3-10" title="10"></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co"># Fit ELO model</span></a>
-<a class="sourceLine" id="cb3-12" title="12">rps_ELO &lt;-<span class="st"> </span><span class="kw"><a href="reference/ELO.html">ELO</a></span>(rps_df)</a>
-<a class="sourceLine" id="cb3-13" title="13"></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="co"># Inspect modelled ratings</span></a>
-<a class="sourceLine" id="cb3-15" title="15">rps_ELO</a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; ELO Ratings For 3 Players Playing 120 Games</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt;     Player Rating Games Win Draw Loss Lag</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; 1 SCISSORS 2204.6    80  40    0   40   0</span></a>
-<a class="sourceLine" id="cb3-21" title="21"><span class="co">#&gt; 2     ROCK 2204.6    80  40    0   40   1</span></a>
-<a class="sourceLine" id="cb3-22" title="22"><span class="co">#&gt; 3    PAPER 2190.7    80  40    0   40   0</span></a>
-<a class="sourceLine" id="cb3-23" title="23"></a>
-<a class="sourceLine" id="cb3-24" title="24"><span class="co"># Get predictions</span></a>
-<a class="sourceLine" id="cb3-25" title="25">ELO_preds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(</a>
-<a class="sourceLine" id="cb3-26" title="26">    rps_ELO,</a>
-<a class="sourceLine" id="cb3-27" title="27">    <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(rps_df)</a>
-<a class="sourceLine" id="cb3-28" title="28">)</a>
-<a class="sourceLine" id="cb3-29" title="29"></a>
-<a class="sourceLine" id="cb3-30" title="30"><span class="co"># Inspect outcomes and predictions</span></a>
-<a class="sourceLine" id="cb3-31" title="31"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(</a>
-<a class="sourceLine" id="cb3-32" title="32">    <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(rps_df),</a>
-<a class="sourceLine" id="cb3-33" title="33">    <span class="dt">ELO_preds =</span> <span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(ELO_preds, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb3-34" title="34">)</a>
-<a class="sourceLine" id="cb3-35" title="35"><span class="co">#&gt;   time_index  throw_1  throw_2 outcome ELO_preds</span></a>
-<a class="sourceLine" id="cb3-36" title="36"><span class="co">#&gt; 1          1    PAPER     ROCK       1      0.48</span></a>
-<a class="sourceLine" id="cb3-37" title="37"><span class="co">#&gt; 2          2     ROCK SCISSORS       1      0.50</span></a>
-<a class="sourceLine" id="cb3-38" title="38"><span class="co">#&gt; 3          3 SCISSORS    PAPER       1      0.52</span></a>
-<a class="sourceLine" id="cb3-39" title="39"><span class="co">#&gt; 4          4     ROCK    PAPER       0      0.52</span></a>
-<a class="sourceLine" id="cb3-40" title="40"><span class="co">#&gt; 5          5 SCISSORS     ROCK       0      0.50</span></a>
-<a class="sourceLine" id="cb3-41" title="41"><span class="co">#&gt; 6          6    PAPER SCISSORS       0      0.48</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># Inspect rock paper scissors data</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">rps_df</span>)
+<span class="co">#&gt;   time_index  throw_1  throw_2 outcome</span>
+<span class="co">#&gt; 1          1    PAPER     ROCK       1</span>
+<span class="co">#&gt; 2          2     ROCK SCISSORS       1</span>
+<span class="co">#&gt; 3          3 SCISSORS    PAPER       1</span>
+<span class="co">#&gt; 4          4     ROCK    PAPER       0</span>
+<span class="co">#&gt; 5          5 SCISSORS     ROCK       0</span>
+<span class="co">#&gt; 6          6    PAPER SCISSORS       0</span>
+
+<span class="co"># Fit ELO model</span>
+<span class="no">rps_ELO</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ELO.html">ELO</a></span>(<span class="no">rps_df</span>)
+
+<span class="co"># Inspect modelled ratings</span>
+<span class="no">rps_ELO</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ELO Ratings For 3 Players Playing 120 Games</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Player Rating Games Win Draw Loss Lag</span>
+<span class="co">#&gt; 1 SCISSORS 2204.6    80  40    0   40   0</span>
+<span class="co">#&gt; 2     ROCK 2204.6    80  40    0   40   1</span>
+<span class="co">#&gt; 3    PAPER 2190.7    80  40    0   40   0</span>
+
+<span class="co"># Get predictions</span>
+<span class="no">ELO_preds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(
+    <span class="no">rps_ELO</span>,
+    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">rps_df</span>)
+)
+
+<span class="co"># Inspect outcomes and predictions</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(
+    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">rps_df</span>),
+    <span class="kw">ELO_preds</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">ELO_preds</span>, <span class="fl">3</span>)
+)
+<span class="co">#&gt;   time_index  throw_1  throw_2 outcome ELO_preds</span>
+<span class="co">#&gt; 1          1    PAPER     ROCK       1      0.48</span>
+<span class="co">#&gt; 2          2     ROCK SCISSORS       1      0.50</span>
+<span class="co">#&gt; 3          3 SCISSORS    PAPER       1      0.52</span>
+<span class="co">#&gt; 4          4     ROCK    PAPER       0      0.52</span>
+<span class="co">#&gt; 5          5 SCISSORS     ROCK       0      0.50</span>
+<span class="co">#&gt; 6          6    PAPER SCISSORS       0      0.48</span></pre></div>
 <p>We note that while the estimated ratings are roughly equal, the predicted probabilities are very poor. Elo cannot handle the cyclic, non-transitive nature of this system.</p>
 <p>Let’s fit a <strong>multidimensional Elo</strong> model using <code><a href="reference/mELO.html">mELO()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Fit mELO model</span></a>
-<a class="sourceLine" id="cb4-2" title="2">rps_mELO &lt;-<span class="st"> </span><span class="kw"><a href="reference/mELO.html">mELO</a></span>(rps_df, <span class="dt">k=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb4-3" title="3"></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co"># Inspect modelled ratings</span></a>
-<a class="sourceLine" id="cb4-5" title="5">rps_mELO</a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; mELO Ratings For 3 Players Playing 120 Games</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; k = 1.</span></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt;     Player Rating Games Win Draw Loss Lag</span></a>
-<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt; 1    PAPER 2200.7    80  40    0   40   0</span></a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; 2 SCISSORS 2200.2    80  40    0   40   0</span></a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; 3     ROCK 2199.2    80  40    0   40   1</span></a>
-<a class="sourceLine" id="cb4-15" title="15"></a>
-<a class="sourceLine" id="cb4-16" title="16"><span class="co"># Get predictions</span></a>
-<a class="sourceLine" id="cb4-17" title="17">mELO_preds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(</a>
-<a class="sourceLine" id="cb4-18" title="18">    rps_mELO,</a>
-<a class="sourceLine" id="cb4-19" title="19">    <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(rps_df)</a>
-<a class="sourceLine" id="cb4-20" title="20">)</a>
-<a class="sourceLine" id="cb4-21" title="21"></a>
-<a class="sourceLine" id="cb4-22" title="22"><span class="co"># Inspect outcomes and predictions</span></a>
-<a class="sourceLine" id="cb4-23" title="23"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(</a>
-<a class="sourceLine" id="cb4-24" title="24">    <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(rps_df),</a>
-<a class="sourceLine" id="cb4-25" title="25">    <span class="dt">mELO_preds =</span> <span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(mELO_preds, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb4-26" title="26">)</a>
-<a class="sourceLine" id="cb4-27" title="27"><span class="co">#&gt;   time_index  throw_1  throw_2 outcome mELO_preds</span></a>
-<a class="sourceLine" id="cb4-28" title="28"><span class="co">#&gt; 1          1    PAPER     ROCK       1      0.999</span></a>
-<a class="sourceLine" id="cb4-29" title="29"><span class="co">#&gt; 2          2     ROCK SCISSORS       1      0.999</span></a>
-<a class="sourceLine" id="cb4-30" title="30"><span class="co">#&gt; 3          3 SCISSORS    PAPER       1      0.999</span></a>
-<a class="sourceLine" id="cb4-31" title="31"><span class="co">#&gt; 4          4     ROCK    PAPER       0      0.001</span></a>
-<a class="sourceLine" id="cb4-32" title="32"><span class="co">#&gt; 5          5 SCISSORS     ROCK       0      0.001</span></a>
-<a class="sourceLine" id="cb4-33" title="33"><span class="co">#&gt; 6          6    PAPER SCISSORS       0      0.001</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="co"># Fit mELO model</span>
+<span class="no">rps_mELO</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/mELO.html">mELO</a></span>(<span class="no">rps_df</span>, <span class="kw">k</span><span class="kw">=</span><span class="fl">1</span>)
+
+<span class="co"># Inspect modelled ratings</span>
+<span class="no">rps_mELO</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; mELO Ratings For 3 Players Playing 120 Games</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; k = 1.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Player Rating Games Win Draw Loss Lag</span>
+<span class="co">#&gt; 1    PAPER 2200.7    80  40    0   40   0</span>
+<span class="co">#&gt; 2 SCISSORS 2200.2    80  40    0   40   0</span>
+<span class="co">#&gt; 3     ROCK 2199.2    80  40    0   40   1</span>
+
+<span class="co"># Get predictions</span>
+<span class="no">mELO_preds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(
+    <span class="no">rps_mELO</span>,
+    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">rps_df</span>)
+)
+
+<span class="co"># Inspect outcomes and predictions</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(
+    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">rps_df</span>),
+    <span class="kw">mELO_preds</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">mELO_preds</span>, <span class="fl">3</span>)
+)
+<span class="co">#&gt;   time_index  throw_1  throw_2 outcome mELO_preds</span>
+<span class="co">#&gt; 1          1    PAPER     ROCK       1      0.999</span>
+<span class="co">#&gt; 2          2     ROCK SCISSORS       1      0.999</span>
+<span class="co">#&gt; 3          3 SCISSORS    PAPER       1      0.999</span>
+<span class="co">#&gt; 4          4     ROCK    PAPER       0      0.001</span>
+<span class="co">#&gt; 5          5 SCISSORS     ROCK       0      0.001</span>
+<span class="co">#&gt; 6          6    PAPER SCISSORS       0      0.001</span></pre></div>
 <p>A convenient helper function has been provided to generate predictions for all interactions:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/model_pred_mat.html">model_pred_mat</a></span>(</a>
-<a class="sourceLine" id="cb5-2" title="2">  rps_mELO,</a>
-<a class="sourceLine" id="cb5-3" title="3">  rps_df[[<span class="dv">2</span>]]</a>
-<a class="sourceLine" id="cb5-4" title="4">) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="st">  </span>knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/model_pred_mat.html">model_pred_mat</a></span>(
+  <span class="no">rps_mELO</span>,
+  <span class="no">rps_df</span><span class="kw">[[</span><span class="fl">2</span>]]
+) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fl">3</span>) <span class="kw">%&gt;%</span>
+  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>()</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -258,11 +259,11 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/dclaz/mELO">https://​github.com/​dclaz/​mELO</a>
+<li>Browse source code at <br><a href="https://github.com/dclaz/mELO/">https://​github.com/​dclaz/​mELO/​</a>
 </li>
 </ul>
 </div>
@@ -289,7 +290,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

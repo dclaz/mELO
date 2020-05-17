@@ -1,7 +1,8 @@
 #' Estimate C matrix from an Advantage/Disadvantage matrix
 #'
 #' Use this function to estimate a possible C matrix from a skew-symmetric A
-#' matrix. Recall that \eqn{A = C \Omega C'}.
+#' matrix. Recall that \eqn{A = C \Omega C'}. Combined with est_A_from_data(),
+#' this might be useful for warm starting mELO models.
 #'
 #' @param A_mat An advantage/disadvantage matrix.
 #' @param k The number of columns of the C matrix. More complex
